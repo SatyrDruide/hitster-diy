@@ -22,9 +22,9 @@ body {
   font-family:'Helvetica Neue', Arial, sans-serif;
   background: var(--bg-light);
   color: var(--text-light);
-  min-height:100vh;
   display:flex;
   flex-direction:column;
+  min-height:100vh;
   transition: background 0.4s, color 0.4s;
 }
 body.dark { background: var(--bg-dark); color: var(--text-dark); }
@@ -61,7 +61,7 @@ h2 {
   font-weight:bold;
   color: var(--accent-light);
   text-align:center;
-  margin:40px 0 20px 0;
+  margin:20px 0 10px 0;
   text-shadow:0 0 10px rgba(255,60,166,0.6);
   animation:pulse 2s infinite;
 }
@@ -71,8 +71,8 @@ body.dark h2 { color: var(--accent-dark); text-shadow:0 0 12px rgba(255,90,176,0
 /* Fehleranzeige */
 .error-message {
   color: var(--error-color);
-  font-size:0.9em;
-  margin-bottom:5px;
+  font-size:1em;
+  margin:5px 0;
   display:none;
 }
 
@@ -82,11 +82,11 @@ body.dark h2 { color: var(--accent-dark); text-shadow:0 0 12px rgba(255,90,176,0
   display:flex;
   justify-content:center;
   align-items:center;
-  padding:20px;
+  padding:10px;
 }
 .card {
   width:280px;
-  height:420px;
+  max-height:420px;
   perspective:1200px;
   display:none;
 }
@@ -125,10 +125,10 @@ body.dark .card-artist { color:#ccc; }
   display:flex;
   flex-direction:column;
   align-items:center;
-  padding:20px;
+  padding:10px 0 20px 0;
 }
 input[type="text"] {
-  font-size:1.2em; padding:10px; width:160px;
+  font-size:1.4em; padding:12px; width:180px;
   border-radius:10px; border:2px solid var(--accent-light);
   text-align:center; margin-bottom:10px; outline:none;
   transition: border 0.3s;
@@ -149,13 +149,13 @@ body.dark button { background-color: var(--accent-dark); }
 footer { font-size:0.9em; color:#999; text-align:center; padding:10px 0; }
 body.dark footer { color:#aaa; }
 
-/* Mobile */
+/* Mobile Anpassungen */
 @media(max-width:480px){
-  .card{ width:200px; height:300px; }
+  .card{ width:200px; max-height:300px; }
   .card-title{ font-size:1em; }
   .card-year{ font-size:2em; }
   .card-artist{ font-size:1em; }
-  input[type="text"]{ width:140px; }
+  input[type="text"]{ width:160px; font-size:1.3em; }
 }
 </style>
 </head>
@@ -168,6 +168,13 @@ body.dark footer { color:#aaa; }
 
 <h2>🎵 HITSTER DIY</h2>
 
+<div class="controls">
+  <div class="error-message" id="errorMessage">Falscher Code!</div>
+  <input type="text" id="songCode" maxlength="5" placeholder="12345">
+  <button onclick="playSong()">▶ Song öffnen</button>
+  <button id="revealButton" onclick="reveal()">📅 Aufdecken</button>
+</div>
+
 <div class="card-container">
   <div class="card" id="card">
     <div class="card-inner" id="cardInner">
@@ -179,13 +186,6 @@ body.dark footer { color:#aaa; }
       </div>
     </div>
   </div>
-</div>
-
-<div class="controls">
-  <div class="error-message" id="errorMessage">Falscher Code!</div>
-  <input type="text" id="songCode" maxlength="5" placeholder="12345">
-  <button onclick="playSong()">▶ Song öffnen</button>
-  <button id="revealButton" onclick="reveal()">📅 Aufdecken</button>
 </div>
 
 <footer>&copy; 2026 Simon Fritsch | HITSTER DIY</footer>
