@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <title>Hitster DIY – Spotify Link</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <style>
-    /* Grundlayout */
     * {
       box-sizing: border-box;
       margin: 0;
@@ -17,9 +17,8 @@
       font-family: 'Helvetica Neue', Arial, sans-serif;
       background: linear-gradient(to bottom, #fff0f6, #ffe6f0);
       display: flex;
-      justify-content: flex-start;
-      align-items: center;
       flex-direction: column;
+      align-items: center;
       text-align: center;
       color: #333;
       padding: 50px 20px;
@@ -28,73 +27,115 @@
     h2 {
       font-size: 2.5em;
       color: #ff3ca6;
-      margin-bottom: 1em;
+      margin-bottom: 30px;
     }
 
     p {
       font-size: 1.2em;
-      margin-bottom: 15px;
+      margin-bottom: 10px;
       color: #555;
     }
 
-    /* Input-Feld */
-    input[type="text"] {
-      font-size: 1.2em;
-      padding: 10px;
-      width: 150px;
+    input {
+      font-size: 1.3em;
+      padding: 12px;
+      width: 160px;
       text-align: center;
-      border-radius: 10px;
+      border-radius: 12px;
       border: 2px solid #ff3ca6;
       outline: none;
-      transition: all 0.3s ease;
+      margin-bottom: 20px;
     }
 
-    input[type="text"]:focus {
-      border-color: #ff5ab0;
-      box-shadow: 0 0 10px rgba(255, 60, 166, 0.3);
-    }
-
-    /* Buttons */
     button {
       font-size: 1.2em;
-      padding: 12px 25px;
+      padding: 14px 30px;
       margin: 10px;
       border: none;
-      border-radius: 12px;
+      border-radius: 14px;
       cursor: pointer;
       color: #fff;
       background-color: #ff3ca6;
-      transition: all 0.3s ease;
-      box-shadow: 0 5px 15px rgba(255, 60, 166, 0.3);
+      box-shadow: 0 8px 20px rgba(255, 60, 166, 0.35);
+      transition: all 0.25s ease;
     }
 
     button:hover {
       background-color: #ff5ab0;
       transform: translateY(-2px) scale(1.05);
-      box-shadow: 0 8px 20px rgba(255, 60, 166, 0.4);
     }
 
-    /* Footer / Credits */
+    /* ---------------- HITSTER KARTE ---------------- */
+
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 100;
+    }
+
+    .card {
+      background: linear-gradient(160deg, #ffffff, #ffe6f0);
+      width: 280px;
+      height: 420px;
+      border-radius: 22px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+      padding: 25px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      animation: pop 0.35s ease-out;
+    }
+
+    @keyframes pop {
+      from {
+        transform: scale(0.7);
+        opacity: 0;
+      }
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    .card-title {
+      font-size: 1.1em;
+      font-weight: bold;
+      color: #ff3ca6;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .card-year {
+      font-size: 4.5em;
+      font-weight: 900;
+      color: #222;
+    }
+
+    .card-artist {
+      font-size: 1.3em;
+      color: #555;
+    }
+
+    .close {
+      margin-top: 20px;
+      background: #ff3ca6;
+    }
+
     footer {
       position: absolute;
       bottom: 20px;
       font-size: 0.9em;
       color: #999;
     }
-
-    footer a {
-      color: #ff3ca6;
-      text-decoration: none;
-    }
-
-    footer a:hover {
-      text-decoration: underline;
-    }
   </style>
 </head>
 <body>
 
-<h2>🎵 Hitster DIY – Spotify Link</h2>
+<h2>🎵 Hitster DIY</h2>
 
 <p>Gib den 5-stelligen Code ein:</p>
 <input type="text" id="songCode" maxlength="5" placeholder="12345">
@@ -104,8 +145,18 @@
 <button onclick="reveal()">📅 Aufdecken</button>
 
 <footer>
-  &copy; 2026 Simon Fritsch | Projekt: Hitster DIY
+  &copy; 2026 Simon Fritsch | Hitster DIY
 </footer>
+
+<!-- HITSTER KARTE -->
+<div class="overlay" id="overlay">
+  <div class="card">
+    <div class="card-title" id="cardTitle">Titel</div>
+    <div class="card-year" id="cardYear">1999</div>
+    <div class="card-artist" id="cardArtist">Interpret</div>
+    <button class="close" onclick="closeCard()">Schließen</button>
+  </div>
+</div>
 
 <script src="songs.js"></script>
 <script>
@@ -118,7 +169,6 @@ function playSong() {
     alert('Falscher Code!');
     return;
   }
-  // öffnet Spotify Link in neuem Tab
   window.open(currentSong.link, "_blank");
 }
 
@@ -127,11 +177,18 @@ function reveal() {
     alert('Zuerst einen Song öffnen!');
     return;
   }
-  alert(`${currentSong.title} (${currentSong.year})`);
+
+  document.getElementById("cardTitle").textContent = currentSong.title;
+  document.getElementById("cardYear").textContent = currentSong.year;
+  document.getElementById("cardArtist").textContent = currentSong.artist;
+
+  document.getElementById("overlay").style.display = "flex";
+}
+
+function closeCard() {
+  document.getElementById("overlay").style.display = "none";
 }
 </script>
 
 </body>
 </html>
-
-
