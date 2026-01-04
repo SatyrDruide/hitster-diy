@@ -1,183 +1,216 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
-  <title>Hitster DIY</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<title>Hitster DIY – Landing Page</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <style>
-    :root {
-      --bg: #fff0f6;
-      --bg-soft: #ffe6f0;
-      --text: #333;
-      --accent: #ff3ca6;
-      --card-back-1: #ff3ca6;
-      --card-back-2: #ff85c1;
-    }
+<style>
+  :root {
+    --bg-light: linear-gradient(to bottom, #fff0f6, #ffe6f0);
+    --bg-dark: linear-gradient(to bottom, #1a1a1f, #2a2a33);
+    --text-light: #333;
+    --text-dark: #f2f2f2;
+    --accent-light: #ff3ca6;
+    --accent-dark: #ff5ab0;
+  }
 
-    body.dark {
-      --bg: #1a1a1f;
-      --bg-soft: #2a2a33;
-      --text: #f2f2f2;
-      --accent: #ff5ab0;
-    }
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    background: var(--bg-light);
+    color: var(--text-light);
+    text-align: center;
+    transition: background 0.4s, color 0.4s;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+  }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+  body.dark {
+    background: var(--bg-dark);
+    color: var(--text-dark);
+  }
 
-    body {
-      min-height: 100vh;
-      font-family: 'Helvetica Neue', Arial, sans-serif;
-      background: linear-gradient(to bottom, var(--bg), var(--bg-soft));
-      color: var(--text);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      padding: 40px 20px;
-      transition: background 0.4s, color 0.4s;
-    }
+  .dark-toggle {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 1.5em;
+    cursor: pointer;
+    user-select: none;
+  }
 
-    .container {
-      max-width: 900px;
-      width: 100%;
-      position: relative;
-    }
+  h1 {
+    font-size: 3em;
+    color: var(--accent-light);
+    margin-bottom: 10px;
+    transition: color 0.4s;
+  }
 
-    /* Dark Mode Toggle */
-    .toggle {
-      position: absolute;
-      top: 0;
-      right: 0;
-      font-size: 1.4em;
-      cursor: pointer;
-      user-select: none;
-      opacity: 0.7;
-    }
+  body.dark h1 {
+    color: var(--accent-dark);
+  }
 
-    .toggle:hover {
-      opacity: 1;
-    }
+  h2 {
+    font-size: 1.3em;
+    color: #555;
+    margin-bottom: 40px;
+  }
 
-    h1 {
-      font-size: 3.2em;
-      color: var(--accent);
-      margin-bottom: 10px;
-    }
+  .cta-button {
+    font-size: 1.4em;
+    padding: 16px 40px;
+    border-radius: 18px;
+    border: none;
+    background-color: var(--accent-light);
+    color: #fff;
+    cursor: pointer;
+    box-shadow: 0 10px 25px rgba(255, 60, 166, 0.35);
+    transition: all 0.3s ease;
+    margin-top: 30px;
+    animation: pulse 2s infinite;
+  }
 
-    .claim {
-      font-size: 1.3em;
-      opacity: 0.85;
-      margin-bottom: 50px;
-    }
+  body.dark .cta-button {
+    background-color: var(--accent-dark);
+  }
 
-    /* 3 Steps */
-    .steps {
-      display: flex;
-      justify-content: center;
-      gap: 40px;
-      margin-bottom: 60px;
-      flex-wrap: wrap;
-    }
+  .cta-button:hover {
+    transform: scale(1.05);
+  }
 
-    .step {
-      max-width: 200px;
-      font-size: 1.1em;
-      line-height: 1.4;
-    }
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.07); }
+  }
 
-    .step span {
-      display: block;
-      font-size: 2em;
-      margin-bottom: 10px;
-    }
+  /* Interaktive Vorschau Karte */
+  .preview-wrapper {
+    perspective: 1200px;
+    width: 280px;
+    height: 420px;
+    margin: 40px auto;
+  }
 
-    /* Fake Karte */
-    .card-preview {
-      margin: 0 auto 60px;
-      width: 220px;
-      height: 340px;
-      border-radius: 22px;
-      background: linear-gradient(160deg, var(--card-back-1), var(--card-back-2));
-      color: white;
-      font-weight: bold;
-      font-size: 2em;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      letter-spacing: 2px;
-      box-shadow: 0 25px 50px rgba(0,0,0,0.25);
-      transform: rotate(-6deg);
-    }
+  .preview-card {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.9s cubic-bezier(.4,.2,.2,1);
+  }
 
-    /* Start Button */
-    .start {
-      display: inline-block;
-      padding: 18px 55px;
-      font-size: 1.4em;
-      font-weight: bold;
-      color: white;
-      background-color: var(--accent);
-      border-radius: 16px;
-      text-decoration: none;
-      box-shadow: 0 10px 30px rgba(255, 60, 166, 0.4);
-      transition: transform 0.25s, box-shadow 0.25s;
-    }
+  .preview-card.flipped {
+    transform: rotateY(180deg);
+  }
 
-    .start:hover {
-      transform: translateY(-3px) scale(1.05);
-      box-shadow: 0 15px 40px rgba(255, 60, 166, 0.5);
-    }
+  .card-side {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 24px;
+    backface-visibility: hidden;
+    box-shadow: 0 25px 45px rgba(0,0,0,0.25);
+    border: 1px solid rgba(255,255,255,0.45);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 26px;
+    transition: background 0.4s, color 0.4s;
+  }
 
-    footer {
-      margin-top: 60px;
-      font-size: 0.9em;
-      opacity: 0.6;
-    }
-  </style>
+  .card-back {
+    background: linear-gradient(160deg, #ff3ca6, #ff85c1);
+    color: white;
+    font-size: 2em;
+    font-weight: bold;
+    letter-spacing: 2px;
+  }
+
+  .card-front {
+    background: linear-gradient(160deg, #ffffff, #ffe6f0);
+    transform: rotateY(180deg);
+    justify-content: space-between;
+    color: #222;
+  }
+
+  body.dark .card-front {
+    background: linear-gradient(160deg, #2a2a33, #3a3a44);
+    color: #f2f2f2;
+  }
+
+  .card-title { font-size: 1.2em; font-weight: bold; color: #ff3ca6; margin-bottom: 10px; }
+  body.dark .card-title { color: #ff5ab0; }
+
+  .card-year { font-size: 4em; font-weight: 900; color: #222; margin-bottom: 10px; }
+  body.dark .card-year { color: #f2f2f2; }
+
+  .card-artist { font-size: 1.2em; color: #555; }
+  body.dark .card-artist { color: #ccc; }
+
+  footer {
+    margin-top: 60px;
+    font-size: 0.85em;
+    color: #999;
+  }
+
+  body.dark footer { color: #aaa; }
+
+  @media (max-width:480px) {
+    .preview-wrapper { width: 220px; height: 330px; }
+    .card-year { font-size: 3em; }
+  }
+</style>
 </head>
 <body>
 
-  <div class="container">
-    <div class="toggle" onclick="toggleDark()">🌙</div>
+<div class="dark-toggle" onclick="toggleDark()">🌙</div>
 
-    <h1>🎵 Hitster DIY</h1>
-    <div class="claim">Das Musik-Zeitreise-Spiel für Zuhause</div>
+<h1>🎵 Hitster DIY</h1>
+<h2>Errate Songs. Decke das Jahr auf. Erlebe Musik neu!</h2>
 
-    <div class="steps">
-      <div class="step">
-        <span>🎧</span>
-        Song anhören
-      </div>
-      <div class="step">
-        <span>🧠</span>
-        Jahr erraten
-      </div>
-      <div class="step">
-        <span>📅</span>
-        Karte aufdecken
-      </div>
+<!-- Interaktive Vorschau -->
+<div class="preview-wrapper" id="previewWrapper">
+  <div class="preview-card" id="previewCard">
+    <div class="card-side card-back">HITSTER<br>DIY</div>
+    <div class="card-side card-front">
+      <div class="card-title">Song Titel</div>
+      <div class="card-year">2026</div>
+      <div class="card-artist">Interpret</div>
     </div>
-
-    <div class="card-preview">
-      HITSTER<br>DIY
-    </div>
-
-    <a href="play.html" class="start">Spiel starten</a>
-
-    <footer>
-      © 2026 Simon Fritsch · Made for local game nights
-    </footer>
   </div>
+</div>
 
-  <script>
-    function toggleDark() {
-      document.body.classList.toggle("dark");
-    }
-  </script>
+<!-- CTA -->
+<button class="cta-button" onclick="startGame()">▶ Spiel starten</button>
+
+<footer>
+  &copy; 2026 Simon Fritsch · Hitster DIY
+</footer>
+
+<script>
+const previewCard = document.getElementById("previewCard");
+
+function toggleDark() {
+  document.body.classList.toggle("dark");
+}
+
+// Flip-Animation Loop für Vorschau
+setInterval(() => {
+  previewCard.classList.toggle("flipped");
+}, 3000);
+
+// CTA Button
+function startGame() {
+  window.location.href = "play.html";
+}
+</script>
 
 </body>
 </html>
