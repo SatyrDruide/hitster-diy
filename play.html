@@ -62,14 +62,23 @@ body.dark { background: var(--bg-dark); color: var(--text-dark); }
 body.dark .toggle-switch { background: #666; }
 body.dark .toggle-switch::after { transform: translateX(24px); }
 
-/* Header */
+/* Header / Logo */
 h2 {
-  font-size: 2.5em;
+  font-size: 3em;
+  font-weight: bold;
   color: var(--accent-light);
-  margin-bottom: 20px;
   text-align: center;
+  margin-bottom: 30px;
+  text-shadow: 0 0 10px rgba(255,60,166,0.6);
+  animation: pulse 2s infinite;
+  transition: color 0.4s;
 }
-body.dark h2 { color: var(--accent-dark); }
+body.dark h2 { color: var(--accent-dark); text-shadow: 0 0 12px rgba(255,90,176,0.7); }
+
+@keyframes pulse {
+  0%,100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
 
 /* Controls */
 .controls {
@@ -105,7 +114,7 @@ button {
 button:hover { transform: scale(1.05); background-color: #ff5ab0; }
 body.dark button { background-color: var(--accent-dark); }
 
-/* --- Flex Container für Karte + Button --- */
+/* --- Hauptbereich Flex Container --- */
 .main-container {
   display: flex;
   flex-direction: column;
@@ -121,6 +130,7 @@ body.dark button { background-color: var(--accent-dark); }
   width: 280px;
   height: 420px;
   margin-bottom: 40px; /* Abstand zum Button */
+  display: none; /* erscheint erst nach Aufdecken */
 }
 .card {
   width: 100%;
@@ -194,7 +204,7 @@ body.dark footer { color: #aaa; }
   <div class="toggle-switch" onclick="toggleDark()"></div>
 </div>
 
-<h2>🎵 Hitster DIY</h2>
+<h2>🎵 HITSTER DIY</h2>
 
 <div class="controls">
   <input type="text" id="songCode" maxlength="5" placeholder="12345">
@@ -248,7 +258,7 @@ function playSong() {
   window.open(currentSong.link,"_blank");
 }
 
-// Aufdecken Animation
+// Aufdecken Animation + Karte sichtbar
 function reveal() {
   if(!currentSong){ alert('Zuerst Song öffnen!'); return; }
 
@@ -258,7 +268,7 @@ function reveal() {
 
   const card = document.getElementById("card");
   const wrapper = document.getElementById("cardWrapper");
-  wrapper.style.display="block";
+  wrapper.style.display="block"; // Karte erscheint jetzt
   card.classList.remove("flipped");
   setTimeout(()=>{ card.classList.add("flipped"); }, 150);
 }
