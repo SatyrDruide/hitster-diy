@@ -7,14 +7,15 @@
 
 <style>
 :root {
-  --bg-light: linear-gradient(to bottom, #fff0f6, #ffe6f0);
-  --bg-dark: linear-gradient(to bottom, #1a1a1f, #2a2a33);
-  --text-light: #333;
+  --bg-light: linear-gradient(180deg, #fff0f6, #ffe6f0);
+  --bg-dark: linear-gradient(180deg, #1a1a1f, #2a2a33);
+  --text-light: #222;
   --text-dark: #f2f2f2;
   --accent-light: #ff3ca6;
   --accent-dark: #ff5ab0;
 }
 
+/* Grundlayout */
 body {
   margin: 0;
   font-family: 'Helvetica Neue', Arial, sans-serif;
@@ -23,17 +24,13 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
+  min-height: 100vh;
   padding: 40px 20px;
   transition: background 0.4s, color 0.4s;
-  min-height: 100vh;
 }
 
-body.dark {
-  background: var(--bg-dark);
-  color: var(--text-dark);
-}
+body.dark { background: var(--bg-dark); color: var(--text-dark); }
 
-/* Dark Mode Toggle */
 .dark-toggle {
   position: absolute;
   top: 20px;
@@ -45,9 +42,9 @@ body.dark {
 
 /* Header / Status */
 h1 {
-  font-size: 2.6em;
-  color: var(--accent-light);
+  font-size: 2.8em;
   margin-bottom: 10px;
+  color: var(--accent-light);
   transition: color 0.4s;
 }
 
@@ -57,6 +54,7 @@ body.dark h1 { color: var(--accent-dark); }
   font-size: 1.1em;
   color: #777;
   margin-bottom: 30px;
+  text-align: center;
   transition: color 0.4s;
 }
 
@@ -108,14 +106,6 @@ button.secondary:hover { background-color: #aaa; }
   justify-content: center;
   align-items: center;
   margin: 40px 0 20px;
-  position: relative;
-}
-
-.card-wrapper.idle .card { animation: float 4s ease-in-out infinite; }
-
-@keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-6px); }
 }
 
 .card {
@@ -128,9 +118,9 @@ button.secondary:hover { background-color: #aaa; }
 
 .card.flipped { transform: rotateY(180deg); }
 
-/* Hover Effekt */
+/* Hover-Effekt */
 .card-wrapper:hover .card {
-  transform: scale(1.03) rotateY(2deg) rotateX(1deg);
+  transform: scale(1.03) rotateY(1deg) rotateX(1deg);
   transition: transform 0.25s ease;
 }
 
@@ -141,7 +131,6 @@ button.secondary:hover { background-color: #aaa; }
   border-radius: 24px;
   backface-visibility: hidden;
   box-shadow: 0 25px 45px rgba(0,0,0,0.25);
-  border: 1px solid rgba(255,255,255,0.45);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -153,9 +142,10 @@ button.secondary:hover { background-color: #aaa; }
 .card-back {
   background: linear-gradient(160deg, #ff3ca6, #ff85c1);
   color: white;
-  font-size: 2.2em;
+  font-size: 2em;
   font-weight: bold;
   letter-spacing: 2px;
+  text-align: center;
 }
 
 .card-front {
@@ -163,12 +153,10 @@ button.secondary:hover { background-color: #aaa; }
   transform: rotateY(180deg);
   justify-content: space-between;
   color: #222;
+  text-align: center;
 }
 
-body.dark .card-front {
-  background: linear-gradient(160deg, #2a2a33, #3a3a44);
-  color: #f2f2f2;
-}
+body.dark .card-front { background: linear-gradient(160deg, #2a2a33, #3a3a44); color: #f2f2f2; }
 
 .card-title { font-size: 1.2em; font-weight: bold; color: #ff3ca6; margin-bottom: 10px; }
 body.dark .card-title { color: #ff5ab0; }
@@ -179,6 +167,7 @@ body.dark .card-year { color: #f2f2f2; }
 .card-artist { font-size: 1.2em; color: #555; }
 body.dark .card-artist { color: #ccc; }
 
+/* Footer */
 footer {
   margin-top: auto;
   font-size: 0.85em;
@@ -188,7 +177,7 @@ footer {
 
 body.dark footer { color: #aaa; }
 
-/* Mobile Optimierung */
+/* Mobile */
 @media (max-width:480px) {
   .card-wrapper { width: 220px; height: 330px; }
   .card-year { font-size: 3em; }
@@ -209,7 +198,8 @@ body.dark footer { color: #aaa; }
 <button onclick="playSong()">▶ Song öffnen</button>
 <button onclick="reveal()">📅 Aufdecken</button>
 
-<div class="card-wrapper" id="cardWrapper">
+<!-- Karte -->
+<div class="card-wrapper" id="cardWrapper" style="display:none;">
   <div class="card" id="card">
     <div class="card-side card-back">HITSTER<br>DIY</div>
     <div class="card-side card-front">
@@ -236,9 +226,12 @@ const card = document.getElementById("card");
 const nextBtn = document.getElementById("nextRoundBtn");
 const statusText = document.getElementById("statusText");
 
-function toggleDark() {
-  document.body.classList.toggle("dark");
+// Dark Mode automatisch nach System
+if(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+  document.body.classList.add('dark');
 }
+
+function toggleDark() { document.body.classList.toggle('dark'); }
 
 function playSong() {
   const code = document.getElementById("songCode").value;
@@ -247,7 +240,8 @@ function playSong() {
 
   window.open(currentSong.link, "_blank");
   wrapper.style.display = "flex"; // Karte zentriert
-  wrapper.classList.add("idle");
+  card.classList.remove("flipped");
+  nextBtn.style.display = "none";
   statusText.textContent = "🎶 Song läuft → Bereit zum Aufdecken";
 }
 
@@ -258,7 +252,6 @@ function reveal() {
   document.getElementById("cardYear").textContent = currentSong.year;
   document.getElementById("cardArtist").textContent = currentSong.artist;
 
-  wrapper.classList.remove("idle");
   card.classList.remove("flipped");
   nextBtn.style.display = "none";
 
