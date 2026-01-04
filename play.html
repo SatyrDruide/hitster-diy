@@ -28,7 +28,7 @@ body {
   min-height: 100vh;
   padding: 40px 20px;
   transition: background 0.4s, color 0.4s;
-  overflow: hidden;
+  overflow-x: hidden;
 }
 
 body.dark { background: var(--bg-dark); color: var(--text-dark); }
@@ -120,7 +120,7 @@ button.secondary { background-color: #bbb; box-shadow: none; }
 button.secondary:hover { background-color: #aaa; }
 
 /* Karten Container */
-.card-container {
+.card-wrapper-container {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -143,7 +143,7 @@ button.secondary:hover { background-color: #aaa; }
   border: 2px solid transparent;
 }
 
-.card.flipped { transform: rotateY(180deg) rotateZ(1deg); } /* Mikro-Flip leicht schräg */
+.card.flipped { transform: rotateY(180deg) rotateZ(1deg); }
 .card-wrapper:hover .card { transform: scale(1.03) rotateY(1deg) rotateX(1deg); }
 
 /* Fehler Vibrieren */
@@ -238,6 +238,7 @@ body.dark footer { color: #aaa; }
   .card-wrapper { width: 220px; height: 330px; }
   .card-year { font-size: 3em; }
   input { width: 130px; }
+  #nextRoundBtn { margin-top: 25px; font-size: 1em; padding: 12px 28px; }
 }
 
 /* Hintergrund Noten Partikel */
@@ -273,7 +274,8 @@ body.dark footer { color: #aaa; }
 <button onclick="playSong()">▶ Song öffnen</button>
 <button onclick="reveal()">📅 Aufdecken</button>
 
-<div class="card-container" id="cardContainer" style="display:none;">
+<!-- Karte + Button getrennt für Überlappungsproblem -->
+<div class="card-wrapper-container" id="cardContainer" style="display:none;">
   <div class="card-wrapper">
     <div class="card" id="card">
       <div class="card-side card-back">HITSTER<br>DIY</div>
@@ -345,7 +347,7 @@ function reveal(){
   document.getElementById("cardYear").textContent=currentSong.year;
   document.getElementById("cardArtist").textContent=currentSong.artist;
 
-  // Funkelpartikel auf Karte
+  // Funkelpartikel
   for(let i=0;i<10;i++){
     const spark=document.createElement('div');
     spark.className='spark';
