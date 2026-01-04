@@ -15,7 +15,7 @@
   --accent-dark: #ff5ab0;
 }
 
-/* Body */
+/* Body & Dark Mode */
 body {
   margin: 0;
   font-family: 'Helvetica Neue', Arial, sans-serif;
@@ -25,6 +25,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: flex-start;
   padding: 20px;
   transition: background 0.4s, color 0.4s;
 }
@@ -102,7 +103,6 @@ body.dark input { border-color: var(--accent-dark); }
 button {
   font-size: 1.2em;
   padding: 12px 30px;
-  margin: 5px;
   border: none;
   border-radius: 12px;
   cursor: pointer;
@@ -122,6 +122,7 @@ body.dark button { background-color: var(--accent-dark); }
   justify-content: center;
   flex: 1;
   width: 100%;
+  min-height: 50vh;
 }
 
 /* Karte */
@@ -129,7 +130,7 @@ body.dark button { background-color: var(--accent-dark); }
   perspective: 1200px;
   width: 280px;
   height: 420px;
-  margin-bottom: 40px; /* Abstand zum Button */
+  margin-bottom: 30px; 
   display: none; /* erscheint erst nach Aufdecken */
 }
 .card {
@@ -167,17 +168,38 @@ body.dark button { background-color: var(--accent-dark); }
   background: linear-gradient(160deg, #fff, #ffe6f0);
   transform: rotateY(180deg);
   justify-content: space-between;
+  position: relative;
+  overflow: hidden;
 }
 body.dark .card-front { background: linear-gradient(160deg, #2a2a33, #1a1a26); }
 
-.card-title { font-size: 1.2em; font-weight: bold; color: var(--accent-light); }
+.card-title { font-size: 1.2em; font-weight: bold; color: var(--accent-light); margin-bottom:10px;}
 body.dark .card-title { color: var(--accent-dark); }
 
-.card-year { font-size: 3em; font-weight: 900; color: #222; }
+.card-year { font-size: 3em; font-weight: 900; color: #222; margin-bottom:8px;}
 body.dark .card-year { color: #fff; }
 
-.card-artist { font-size: 1.2em; color: #555; }
+.card-artist { font-size: 1.2em; color: #555;}
 body.dark .card-artist { color: #ccc; }
+
+/* Glanz Effekt */
+.card-front::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top:0;
+  left:-100%;
+  background: linear-gradient(120deg, rgba(255,255,255,0.2), rgba(255,255,255,0.0), rgba(255,255,255,0.2));
+  transform: skewX(-20deg);
+}
+.card.flipped .card-front::after {
+  animation: shine 1s ease forwards;
+}
+@keyframes shine {
+  0% { left: -100%; }
+  100% { left: 200%; }
+}
 
 /* Footer */
 footer {
@@ -208,8 +230,7 @@ body.dark footer { color: #aaa; }
 
 <div class="controls">
   <input type="text" id="songCode" maxlength="5" placeholder="12345">
-  <button onclick="playSong()">▶ Song öffnen</button>
-  <button onclick="reveal()">📅 Aufdecken</button>
+  <button id="revealButton" onclick="reveal()">📅 Aufdecken</button>
 </div>
 
 <div class="main-container">
@@ -224,9 +245,6 @@ body.dark footer { color: #aaa; }
       </div>
     </div>
   </div>
-
-  <!-- Nächste Runde Button -->
-  <button onclick="nextRound()">⏭ Nächste Runde</button>
 </div>
 
 <footer>
@@ -247,37 +265,41 @@ function toggleDark(){
   darkIcon.textContent = document.body.classList.contains('dark')?"🌙":"🌞";
 }
 
-// Song öffnen
+// Button & Karte Logic
+const revealBtn = document.getElementById("revealButton");
+const cardWrapper = document.getElementById("cardWrapper");
+const card = document.getElementById("card");
+
 function playSong() {
   const code = document.getElementById('songCode').value;
   currentSong = SONGS[code];
-  if(!currentSong){ 
-    alert('Falscher Code!'); // Fehler-Feedback
-    return; 
-  }
+  if(!currentSong){ alert('Falscher Code!'); return; }
   window.open(currentSong.link,"_blank");
 }
 
-// Aufdecken Animation + Karte sichtbar
-function reveal() {
+function reveal(){
   if(!currentSong){ alert('Zuerst Song öffnen!'); return; }
 
   document.getElementById("cardTitle").textContent = currentSong.title;
   document.getElementById("cardYear").textContent = currentSong.year;
   document.getElementById("cardArtist").textContent = currentSong.artist;
 
-  const card = document.getElementById("card");
-  const wrapper = document.getElementById("cardWrapper");
-  wrapper.style.display="block"; // Karte erscheint jetzt
+  cardWrapper.style.display = "block";
   card.classList.remove("flipped");
   setTimeout(()=>{ card.classList.add("flipped"); }, 150);
+
+  // Button verwandelt sich in Nächste Runde
+  revealBtn.textContent = "⏭ Nächste Runde";
+  revealBtn.onclick = nextRound;
 }
 
-// Nächste Runde
 function nextRound(){
-  document.getElementById("cardWrapper").style.display="none";
-  document.getElementById("songCode").value="";
+  cardWrapper.style.display = "none";
+  card.classList.remove("flipped");
+  document.getElementById('songCode').value = "";
   currentSong = null;
+  revealBtn.textContent = "📅 Aufdecken";
+  revealBtn.onclick = reveal;
 }
 </script>
 
