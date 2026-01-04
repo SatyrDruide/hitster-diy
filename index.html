@@ -5,6 +5,9 @@
 <title>Hitster DIY – Landing Page</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<!-- Google Font für geschwungene Schrift -->
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+
 <style>
 :root {
   --bg-light: linear-gradient(180deg, #fff0f6, #ffe6f0);
@@ -23,20 +26,17 @@ body {
   color: var(--text-light);
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
+  justify-content: flex-start;
   min-height: 100vh;
-  overflow: hidden;
-  padding: 20px;
+  padding: 40px 20px;
+  overflow-x: hidden;
   transition: background 0.4s, color 0.4s;
 }
 
-body.dark {
-  background: var(--bg-dark);
-  color: var(--text-dark);
-}
+body.dark { background: var(--bg-dark); color: var(--text-dark); }
 
-/* Dark Mode Slider */
+/* Dark Mode Toggle */
 .dark-toggle {
   position: fixed;
   top: 20px;
@@ -69,126 +69,122 @@ body.dark {
   transition: all 0.3s;
 }
 
-body.dark .toggle-switch {
-  background: #666;
-}
+body.dark .toggle-switch { background: #666; }
+body.dark .toggle-switch::after { transform: translateX(24px); }
 
-body.dark .toggle-switch::after {
-  transform: translateX(24px);
-}
-
-/* Header */
-h1 {
-  font-size: 3em;
-  margin-bottom: 10px;
-  color: var(--accent-light);
+/* Logo */
+.logo {
+  font-family: 'Pacifico', cursive;
+  font-size: 4em;
+  color: #ff3ca6;
+  margin-bottom: 20px;
   text-align: center;
+  text-shadow: 0 0 10px rgba(255,60,166,0.7);
+  animation: pulse 2s infinite;
   transition: color 0.4s;
 }
-
-body.dark h1 { color: var(--accent-dark); }
-
-h2 {
-  font-size: 1.2em;
-  color: #555;
-  margin-bottom: 40px;
-  text-align: center;
-  max-width: 400px;
-}
-
-/* CTA Button */
-.cta-button {
-  font-size: 1.4em;
-  padding: 16px 40px;
-  border-radius: 18px;
-  border: none;
-  background-color: var(--accent-light);
-  color: #fff;
-  cursor: pointer;
-  box-shadow: 0 10px 25px rgba(255, 60, 166, 0.35);
-  transition: all 0.3s ease;
-  animation: pulse 2s infinite;
-  margin-top: 30px;
-}
-
-body.dark .cta-button { background-color: var(--accent-dark); }
-
-.cta-button:hover { transform: scale(1.05); }
+body.dark .logo { color: #ff5ab0; text-shadow: 0 0 12px rgba(255,90,176,0.7); }
 
 @keyframes pulse {
   0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.07); }
+  50% { transform: scale(1.05); }
 }
 
-/* Vorschau-Karte zentriert */
-.preview-wrapper {
-  perspective: 1200px;
-  width: 280px;
-  height: 420px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 0 auto;
-  flex-shrink: 0;
+/* Status */
+.status {
+  font-size: 1.2em;
+  color: #555;
+  margin-bottom: 30px;
+  text-align: center;
+  transition: color 0.4s;
+}
+body.dark .status { color: #ccc; }
+
+/* CTA Button */
+.cta-btn {
+  font-size: 1.5em;
+  padding: 16px 40px;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  color: #fff;
+  background-color: #ff3ca6;
+  box-shadow: 0 10px 25px rgba(255,60,166,0.35);
+  transition: all 0.3s;
+  margin-bottom: 40px;
+}
+
+.cta-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 12px 30px rgba(255,60,166,0.5);
+}
+
+body.dark .cta-btn { background-color: #ff5ab0; }
+
+/* Mini Vorschau-Karte */
+.preview-card-wrapper {
+  perspective: 1000px;
+  width: 200px;
+  height: 300px;
+  margin-bottom: 40px;
 }
 
 .preview-card {
   width: 100%;
   height: 100%;
-  position: relative;
-  transform-style: preserve-3d;
-  transition: transform 0.9s cubic-bezier(.4,.2,.2,1);
-}
-
-.preview-card.flipped { transform: rotateY(180deg); }
-
-/* Hover Effekte */
-.card-wrapper:hover .preview-card {
-  transform: scale(1.03) rotateY(1deg) rotateX(1deg);
-}
-
-.card-side {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  border-radius: 24px;
-  backface-visibility: hidden;
-  box-shadow: 0 25px 45px rgba(0,0,0,0.25);
+  background: linear-gradient(160deg, #ffffff, #ffe6f0);
+  border-radius: 20px;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.25);
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
-  padding: 26px;
-  transition: background 0.4s, color 0.4s;
+  justify-content: center;
+  transition: transform 0.8s ease, box-shadow 0.4s ease;
+  cursor: pointer;
+}
+.preview-card:hover {
+  transform: rotateY(10deg) rotateX(5deg) scale(1.05);
+  box-shadow: 0 20px 40px rgba(255,60,166,0.4);
 }
 
-.card-back {
-  background: linear-gradient(160deg, #ff3ca6, #ff85c1);
-  color: white;
-  font-size: 2em;
+.preview-title {
+  font-size: 1.2em;
   font-weight: bold;
-  letter-spacing: 2px;
+  color: #ff3ca6;
+  margin-bottom: 10px;
   text-align: center;
 }
+body.dark .preview-title { color: #ff5ab0; }
 
-.card-front {
-  background: linear-gradient(160deg, #ffffff, #ffe6f0);
-  transform: rotateY(180deg);
-  justify-content: space-between;
+.preview-year {
+  font-size: 2em;
+  font-weight: 900;
   color: #222;
-  text-align: center;
+  margin-bottom: 8px;
 }
+body.dark .preview-year { color: #f2f2f2; }
 
-body.dark .card-front { background: linear-gradient(160deg, #2a2a33, #3a3a44); color: #f2f2f2; }
+.preview-artist {
+  font-size: 1em;
+  color: #555;
+}
+body.dark .preview-artist { color: #ccc; }
 
-.card-title { font-size: 1.2em; font-weight: bold; color: #ff3ca6; margin-bottom: 10px; }
-body.dark .card-title { color: #ff5ab0; }
-
-.card-year { font-size: 4em; font-weight: 900; color: #222; margin-bottom: 10px; }
-body.dark .card-year { color: #f2f2f2; }
-
-.card-artist { font-size: 1.2em; color: #555; }
-body.dark .card-artist { color: #ccc; }
+/* Hintergrund Noten Partikel */
+.particle {
+  position: absolute;
+  width: 6px; height: 6px;
+  background-color: #fff;
+  border-radius: 50%;
+  opacity: 0.4;
+  pointer-events: none;
+  animation: floatNotes linear infinite;
+}
+@keyframes floatNotes {
+  0% { transform: translateY(100vh) rotate(0deg) scale(0.5); opacity: 0; }
+  50% { opacity: 0.6; }
+  100% { transform: translateY(-50px) rotate(360deg) scale(1); opacity: 0; }
+}
 
 /* Footer */
 footer {
@@ -197,68 +193,53 @@ footer {
   color: #999;
   padding: 20px 0;
 }
-
 body.dark footer { color: #aaa; }
 
-/* Mobile Optimierung */
-@media (max-width:480px) {
-  .preview-wrapper { width: 220px; height: 330px; }
-  .card-year { font-size: 3em; }
-}
-
-/* Hintergrund Partikel */
-.particle {
-  position: absolute;
-  border-radius: 50%;
-  opacity: 0.4;
-  background-color: white;
-  pointer-events: none;
-  animation: floatParticles linear infinite;
-}
-
-@keyframes floatParticles {
-  0% { transform: translateY(100vh) scale(0.5); opacity: 0; }
-  50% { opacity: 0.4; }
-  100% { transform: translateY(-50px) scale(1); opacity: 0; }
+/* Mobile */
+@media (max-width:480px){
+  .logo { font-size: 3em; }
+  .cta-btn { font-size: 1.2em; padding: 14px 32px; }
+  .preview-card-wrapper { width: 160px; height: 240px; }
+  .preview-title { font-size: 1em; }
+  .preview-year { font-size: 1.5em; }
 }
 </style>
 </head>
 <body>
 
-<!-- Dark Mode Toggle -->
 <div class="dark-toggle">
   <span id="darkIcon">🌞</span>
   <div class="toggle-switch" onclick="toggleDark()"></div>
 </div>
 
-<h1>🎵 Hitster DIY</h1>
-<h2>Errate Songs. Decke das Jahr auf. Erlebe Musik neu!</h2>
+<!-- Logo -->
+<div class="logo">HITSTER</div>
 
-<!-- Vorschau-Karte -->
-<div class="preview-wrapper">
-  <div class="preview-card" id="previewCard">
-    <div class="card-side card-back">HITSTER<br>DIY</div>
-    <div class="card-side card-front">
-      <div class="card-title">Song Titel</div>
-      <div class="card-year">2026</div>
-      <div class="card-artist">Interpret</div>
-    </div>
+<!-- Status / Info -->
+<div class="status">Tippe auf „Spiel starten“, um loszulegen!</div>
+
+<!-- Mini Vorschau-Karte -->
+<div class="preview-card-wrapper">
+  <div class="preview-card">
+    <div class="preview-title">Song Titel</div>
+    <div class="preview-year">2025</div>
+    <div class="preview-artist">Interpret</div>
   </div>
 </div>
 
 <!-- CTA Button -->
-<button class="cta-button" onclick="startGame()">▶ Spiel starten</button>
+<button class="cta-btn" onclick="startGame()">🎮 Spiel starten</button>
 
 <footer>
   &copy; 2026 Simon Fritsch · Hitster DIY
 </footer>
 
 <script>
-// Dark Mode Automatik
 const darkIcon = document.getElementById('darkIcon');
+
+// Dark Mode automatisch
 if(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches){
-  document.body.classList.add('dark');
-  darkIcon.textContent = "🌙";
+  document.body.classList.add('dark'); darkIcon.textContent = "🌙";
 }
 
 function toggleDark(){
@@ -266,25 +247,22 @@ function toggleDark(){
   darkIcon.textContent = document.body.classList.contains('dark') ? "🌙" : "🌞";
 }
 
-// Flip-Karte Animation
-const previewCard = document.getElementById("previewCard");
-setInterval(()=>{ previewCard.classList.toggle("flipped"); }, 3000);
-
-// CTA
-function startGame(){ window.location.href = "play.html"; }
-
-// Hintergrundpartikel
-const colors = ['#fff','#ffe6f0','#ff3ca6','#ff85c1'];
+// Hintergrund Partikel
+const colors=['#fff','#ffe6f0','#ff3ca6','#ff85c1'];
 for(let i=0;i<40;i++){
-  const p = document.createElement('div');
-  p.className='particle';
-  const size = Math.random()*6+4;
+  const p=document.createElement('div'); p.className='particle';
+  const size=Math.random()*6+4;
   p.style.width=size+'px';
   p.style.height=size+'px';
   p.style.left=Math.random()*100+'vw';
   p.style.animationDuration=(5+Math.random()*10)+'s';
   p.style.backgroundColor = colors[Math.floor(Math.random()*colors.length)];
   document.body.appendChild(p);
+}
+
+// CTA Start Funktion
+function startGame(){
+  window.location.href="play.html";
 }
 </script>
 
