@@ -2,50 +2,43 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
-  <title>Music Timeline</title>
+  <title>Hitster DIY – Spotify Link</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <link rel="manifest" href="manifest.json">
 </head>
-<body style="background:#111;color:#fff;text-align:center;font-family:sans-serif;padding-top:40px">
+<body style="text-align:center;font-family:sans-serif;padding-top:50px;">
 
-  <h2>🎵 Hitster DIY</h2>
+<h2>🎵 Hitster DIY – Spotify Link Version</h2>
 
-  <p>Gib den 5-stelligen Code ein:</p>
-  <input type="text" id="songCode" maxlength="5" placeholder="12345" style="font-size:20px;padding:5px;text-align:center">
-  <br><br>
-  <button onclick="loadSong()" style="font-size:20px;padding:10px">▶ Song laden</button>
-  <br><br>
-  <button onclick="reveal()" style="font-size:18px;padding:10px;margin-top:20px">
-    📅 Aufdecken
-  </button>
+<p>Gib den 5-stelligen Code ein:</p>
+<input type="text" id="songCode" maxlength="5" placeholder="12345" style="font-size:20px;padding:5px;text-align:center">
+<br><br>
+<button onclick="playSong()" style="font-size:20px;padding:10px">▶ Song öffnen</button>
+<br><br>
+<button onclick="reveal()" style="font-size:18px;padding:10px;margin-top:20px">📅 Aufdecken</button>
 
-  <script src="songs.js"></script>
-  <script>
-    let audio;
-    let currentSong;
+<script src="songs.js"></script>
+<script>
+let currentSong;
 
-    function loadSong() {
-      const code = document.getElementById('songCode').value;
-      currentSong = SONGS[code];
-      if (!currentSong) {
-        alert('Falscher Code!');
-        return;
-      }
+function playSong() {
+  const code = document.getElementById('songCode').value;
+  currentSong = SONGS[code];
+  if (!currentSong) {
+    alert('Falscher Code!');
+    return;
+  }
+  // öffnet Spotify Link in neuem Tab
+  window.open(currentSong.link, "_blank");
+}
 
-      if (audio) audio.pause();
-      audio = new Audio(currentSong.preview);
-      audio.play();
-    }
-
-    function reveal() {
-      if (!currentSong) {
-        alert('Zuerst einen Song laden!');
-        return;
-      }
-      alert(`${currentSong.title} (${currentSong.year})`);
-    }
-  </script>
+function reveal() {
+  if (!currentSong) {
+    alert('Zuerst einen Song öffnen!');
+    return;
+  }
+  alert(`${currentSong.title} (${currentSong.year})`);
+}
+</script>
 
 </body>
 </html>
