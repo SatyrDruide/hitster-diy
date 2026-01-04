@@ -3,40 +3,47 @@
 <head>
   <meta charset="UTF-8">
   <title>Music Timeline</title>
-
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
-
   <link rel="manifest" href="manifest.json">
 </head>
-
 <body style="background:#111;color:#fff;text-align:center;font-family:sans-serif;padding-top:40px">
 
-  <h2>🎵 Song läuft</h2>
+  <h2>🎵 Hitster DIY</h2>
 
-  <button onclick="playSong()" style="font-size:20px;padding:15px;margin:10px">
-    ▶ Abspielen
-  </button>
-
-  <br>
-
+  <p>Gib den 5-stelligen Code ein:</p>
+  <input type="text" id="songCode" maxlength="5" placeholder="12345" style="font-size:20px;padding:5px;text-align:center">
+  <br><br>
+  <button onclick="loadSong()" style="font-size:20px;padding:10px">▶ Song laden</button>
+  <br><br>
   <button onclick="reveal()" style="font-size:18px;padding:10px;margin-top:20px">
     📅 Aufdecken
   </button>
 
   <script src="songs.js"></script>
   <script>
-    const params = new URLSearchParams(window.location.search);
-    const id = params.get("id");
-    const song = SONGS[id];
-    const audio = new Audio(song.preview);
+    let audio;
+    let currentSong;
 
-    function playSong() {
+    function loadSong() {
+      const code = document.getElementById('songCode').value;
+      currentSong = SONGS[code];
+      if (!currentSong) {
+        alert('Falscher Code!');
+        return;
+      }
+
+      if (audio) audio.pause();
+      audio = new Audio(currentSong.preview);
       audio.play();
     }
 
     function reveal() {
-      alert(`${song.title} (${song.year})`);
+      if (!currentSong) {
+        alert('Zuerst einen Song laden!');
+        return;
+      }
+      alert(`${currentSong.title} (${currentSong.year})`);
     }
   </script>
 
