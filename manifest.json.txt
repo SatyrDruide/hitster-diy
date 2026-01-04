@@ -1,0 +1,8 @@
+{
+  "name": "Music Timeline",
+  "short_name": "Timeline",
+  "start_url": "/play.html?id=1",
+  "display": "standalone",
+  "background_color": "#111",
+  "theme_color": "#111"
+}
