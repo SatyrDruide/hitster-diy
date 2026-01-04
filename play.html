@@ -12,20 +12,16 @@
       padding: 0;
     }
 
-    body, html {
-      height: 100%;
+    body {
       font-family: 'Helvetica Neue', Arial, sans-serif;
       background: linear-gradient(to bottom, #fff0f6, #ffe6f0);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
       color: #333;
+      text-align: center;
       padding: 50px 20px;
     }
 
     h2 {
-      font-size: 2.5em;
+      font-size: 2.4em;
       color: #ff3ca6;
       margin-bottom: 30px;
     }
@@ -65,29 +61,13 @@
       transform: scale(1.05);
     }
 
-    footer {
-      position: absolute;
-      bottom: 20px;
-      font-size: 0.9em;
-      color: #999;
-    }
-
-    /* ---------- OVERLAY ---------- */
-
-    .overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.45);
-      display: none;
-      justify-content: center;
-      align-items: center;
-      z-index: 100;
-    }
-
-    /* ---------- FLIP CARD ---------- */
+    /* ---------- KARTE ---------- */
 
     .card-wrapper {
+      margin: 40px auto 0;
       perspective: 1200px;
+      width: 280px;
+      display: none;
     }
 
     .card {
@@ -108,7 +88,7 @@
       height: 100%;
       border-radius: 22px;
       backface-visibility: hidden;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.25);
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -116,7 +96,6 @@
       padding: 25px;
     }
 
-    /* Rückseite */
     .card-back {
       background: linear-gradient(160deg, #ff3ca6, #ff85c1);
       color: white;
@@ -125,7 +104,6 @@
       letter-spacing: 2px;
     }
 
-    /* Vorderseite */
     .card-front {
       background: linear-gradient(160deg, #ffffff, #ffe6f0);
       transform: rotateY(180deg);
@@ -151,9 +129,10 @@
       color: #555;
     }
 
-    .close {
-      margin-top: 15px;
-      background: #ff3ca6;
+    footer {
+      margin-top: 50px;
+      font-size: 0.9em;
+      color: #999;
     }
   </style>
 </head>
@@ -168,31 +147,28 @@
 <button onclick="playSong()">▶ Song öffnen</button>
 <button onclick="reveal()">📅 Aufdecken</button>
 
+<!-- KARTE UNTER DEM BUTTON -->
+<div class="card-wrapper" id="cardWrapper">
+  <div class="card" id="card">
+
+    <!-- Rückseite -->
+    <div class="card-side card-back">
+      HITSTER<br>DIY
+    </div>
+
+    <!-- Vorderseite -->
+    <div class="card-side card-front">
+      <div class="card-title" id="cardTitle"></div>
+      <div class="card-year" id="cardYear"></div>
+      <div class="card-artist" id="cardArtist"></div>
+    </div>
+
+  </div>
+</div>
+
 <footer>
   &copy; 2026 Simon Fritsch | Hitster DIY
 </footer>
-
-<!-- OVERLAY + KARTE -->
-<div class="overlay" id="overlay">
-  <div class="card-wrapper">
-    <div class="card" id="card">
-      
-      <!-- Rückseite -->
-      <div class="card-side card-back">
-        HITSTER<br>DIY
-      </div>
-
-      <!-- Vorderseite -->
-      <div class="card-side card-front">
-        <div class="card-title" id="cardTitle">Titel</div>
-        <div class="card-year" id="cardYear">1999</div>
-        <div class="card-artist" id="cardArtist">Interpret</div>
-        <button class="close" onclick="closeCard()">Schließen</button>
-      </div>
-
-    </div>
-  </div>
-</div>
 
 <script src="songs.js"></script>
 <script>
@@ -218,17 +194,15 @@ function reveal() {
   document.getElementById("cardYear").textContent = currentSong.year;
   document.getElementById("cardArtist").textContent = currentSong.artist;
 
-  document.getElementById("overlay").style.display = "flex";
-  setTimeout(() => {
-    document.getElementById("card").classList.add("flipped");
-  }, 200);
-}
+  const wrapper = document.getElementById("cardWrapper");
+  const card = document.getElementById("card");
 
-function closeCard() {
-  document.getElementById("card").classList.remove("flipped");
+  wrapper.style.display = "block";
+  card.classList.remove("flipped");
+
   setTimeout(() => {
-    document.getElementById("overlay").style.display = "none";
-  }, 500);
+    card.classList.add("flipped");
+  }, 150);
 }
 </script>
 
