@@ -73,52 +73,10 @@ body.dark h2 { color: var(--accent-dark); text-shadow:0 0 12px rgba(255,90,176,0
   color: var(--error-color);
   font-size:0.9em;
   margin-bottom:5px;
-  display:none;
+  opacity:0;
+  transition: opacity 0.3s;
 }
-
-/* Karte-Container */
-.card-container {
-  flex:1;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  padding:20px;
-}
-.card {
-  width:280px;
-  height:420px;
-  perspective:1200px;
-  display:none;
-}
-.card-inner {
-  width:100%; height:100%;
-  position: relative;
-  transform-style: preserve-3d;
-  transition: transform 0.8s cubic-bezier(.4,.2,.2,1);
-}
-.card-inner.flipped { transform: rotateY(180deg); }
-.card-side {
-  position:absolute; width:100%; height:100%;
-  border-radius:22px; backface-visibility:hidden;
-  box-shadow:0 20px 40px rgba(0,0,0,0.25);
-  display:flex; flex-direction:column; justify-content:center; align-items:center;
-  padding:25px; transition: background 0.4s, color 0.4s;
-}
-.card-back {
-  background: linear-gradient(160deg, var(--accent-light), #ff85c1);
-  color:white; font-size:2em; font-weight:bold; letter-spacing:2px;
-}
-.card-front {
-  background: linear-gradient(160deg,#fff,#ffe6f0);
-  transform:rotateY(180deg); justify-content:space-between;
-}
-body.dark .card-front { background: linear-gradient(160deg,#2a2a33,#1a1a26); }
-.card-title { font-size:1.2em; font-weight:bold; color:var(--accent-light); margin-bottom:10px;}
-body.dark .card-title { color:var(--accent-dark); }
-.card-year { font-size:3em; font-weight:900; color:#222; margin-bottom:8px;}
-body.dark .card-year { color:#fff; }
-.card-artist { font-size:1.2em; color:#555;}
-body.dark .card-artist { color:#ccc; }
+.error-message.show { opacity:1; }
 
 /* Controls */
 .controls {
@@ -126,9 +84,11 @@ body.dark .card-artist { color:#ccc; }
   flex-direction:column;
   align-items:center;
   padding:20px;
+  z-index:5;
+  position: relative;
 }
 input[type="text"] {
-  font-size:1.2em; padding:10px; width:160px;
+  font-size:1.4em; padding:12px; width:180px;
   border-radius:10px; border:2px solid var(--accent-light);
   text-align:center; margin-bottom:10px; outline:none;
   transition: border 0.3s;
@@ -145,6 +105,51 @@ button {
 button:hover { transform:scale(1.05); background-color:#ff5ab0; }
 body.dark button { background-color: var(--accent-dark); }
 
+/* Card Container */
+.card-container {
+  flex:1;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  position: relative;
+  padding:20px;
+}
+.card {
+  width:280px;
+  height:420px;
+  perspective:1200px;
+  display:none;
+}
+.card-inner {
+  width:100%; height:100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.8s cubic-bezier(.45,.05,.55,.95);
+}
+.card-inner.flipped { transform: rotateY(180deg); }
+.card-side {
+  position:absolute; width:100%; height:100%;
+  border-radius:22px; backface-visibility:hidden;
+  box-shadow:0 20px 40px rgba(0,0,0,0.25);
+  display:flex; flex-direction:column; justify-content:center; align-items:center;
+  padding:25px; transition: background 0.4s, color 0.4s;
+}
+.card-back {
+  background: linear-gradient(160deg, var(--accent-light), #ff85c1);
+  color:white; font-size:2em; font-weight:bold; letter-spacing:2px;
+}
+.card-front {
+  background: linear-gradient(160deg,#fff,#ffe6f0);
+  transform:rotateY(180deg); justify-content:center; flex-direction:column;
+}
+body.dark .card-front { background: linear-gradient(160deg,#2a2a33,#1a1a26); }
+.card-title { font-size:1.2em; font-weight:bold; color:var(--accent-light); margin-bottom:10px;}
+body.dark .card-title { color:var(--accent-dark); }
+.card-year { font-size:3em; font-weight:900; color:#222; margin-bottom:8px;}
+body.dark .card-year { color:#fff; }
+.card-artist { font-size:1.2em; color:#555;}
+body.dark .card-artist { color:#ccc; }
+
 /* Footer */
 footer { font-size:0.9em; color:#999; text-align:center; padding:10px 0; }
 body.dark footer { color:#aaa; }
@@ -155,7 +160,7 @@ body.dark footer { color:#aaa; }
   .card-title{ font-size:1em; }
   .card-year{ font-size:2em; }
   .card-artist{ font-size:1em; }
-  input[type="text"]{ width:140px; }
+  input[type="text"]{ width:140px; font-size:1.3em; }
 }
 </style>
 </head>
@@ -168,6 +173,13 @@ body.dark footer { color:#aaa; }
 
 <h2>🎵 HITSTER DIY</h2>
 
+<div class="controls">
+  <div class="error-message" id="errorMessage">Falscher Code!</div>
+  <input type="text" id="songCode" maxlength="5" placeholder="12345">
+  <button onclick="playSong()">▶ Song öffnen</button>
+  <button id="revealButton" onclick="reveal()">📅 Aufdecken</button>
+</div>
+
 <div class="card-container">
   <div class="card" id="card">
     <div class="card-inner" id="cardInner">
@@ -179,13 +191,6 @@ body.dark footer { color:#aaa; }
       </div>
     </div>
   </div>
-</div>
-
-<div class="controls">
-  <div class="error-message" id="errorMessage">Falscher Code!</div>
-  <input type="text" id="songCode" maxlength="5" placeholder="12345">
-  <button onclick="playSong()">▶ Song öffnen</button>
-  <button id="revealButton" onclick="reveal()">📅 Aufdecken</button>
 </div>
 
 <footer>&copy; 2026 Simon Fritsch | HITSTER DIY</footer>
@@ -212,11 +217,11 @@ function playSong(){
   const code = songInput.value;
   currentSong = SONGS[code];
   if(!currentSong){
-    errorMessage.style.display="block";
+    errorMessage.classList.add("show");
     songInput.classList.add('error');
     return;
   }
-  errorMessage.style.display="none";
+  errorMessage.classList.remove("show");
   songInput.classList.remove('error');
   window.open(currentSong.link,"_blank");
 }
@@ -228,11 +233,11 @@ const cardInner = document.getElementById("cardInner");
 
 function reveal(){
   if(!currentSong){
-    errorMessage.style.display="block";
+    errorMessage.classList.add("show");
     songInput.classList.add('error');
     return;
   }
-  errorMessage.style.display="none";
+  errorMessage.classList.remove("show");
   songInput.classList.remove('error');
 
   document.getElementById("cardTitle").textContent=currentSong.title;
@@ -258,7 +263,7 @@ function nextRound(){
 
 // Fehler zurücksetzen beim Tippen
 songInput.addEventListener('input', ()=>{
-  errorMessage.style.display="none";
+  errorMessage.classList.remove("show");
   songInput.classList.remove('error');
 });
 </script>
