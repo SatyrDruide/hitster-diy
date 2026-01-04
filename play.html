@@ -27,27 +27,55 @@ body {
   min-height: 100vh;
   padding: 40px 20px;
   transition: background 0.4s, color 0.4s;
+  overflow: hidden;
 }
 
 body.dark { background: var(--bg-dark); color: var(--text-dark); }
 
+/* Dark Mode Toggle */
 .dark-toggle {
-  position: absolute;
+  position: fixed;
   top: 20px;
   right: 20px;
-  font-size: 1.5em;
+  display: flex;
+  align-items: center;
   cursor: pointer;
   user-select: none;
 }
 
-/* Header / Status */
+.toggle-switch {
+  position: relative;
+  width: 50px;
+  height: 26px;
+  background: #ccc;
+  border-radius: 13px;
+  margin-left: 10px;
+  transition: background 0.3s;
+}
+
+.toggle-switch::after {
+  content: '';
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  background: white;
+  border-radius: 50%;
+  top: 2px;
+  left: 2px;
+  transition: all 0.3s;
+}
+
+body.dark .toggle-switch { background: #666; }
+body.dark .toggle-switch::after { transform: translateX(24px); }
+
+/* Header */
 h1 {
   font-size: 2.8em;
   margin-bottom: 10px;
   color: var(--accent-light);
+  text-align: center;
   transition: color 0.4s;
 }
-
 body.dark h1 { color: var(--accent-dark); }
 
 .status {
@@ -70,7 +98,6 @@ input {
   outline: none;
   transition: border-color 0.4s;
 }
-
 body.dark input { border-color: var(--accent-dark); }
 
 button {
@@ -85,16 +112,10 @@ button {
   box-shadow: 0 10px 25px rgba(255, 60, 166, 0.35);
   transition: all 0.25s ease;
 }
-
 body.dark button { background-color: var(--accent-dark); }
 
 button:hover { transform: scale(1.05); }
-
-button.secondary {
-  background-color: #bbb;
-  box-shadow: none;
-}
-
+button.secondary { background-color: #bbb; box-shadow: none; }
 button.secondary:hover { background-color: #aaa; }
 
 /* Karte zentriert */
@@ -117,12 +138,7 @@ button.secondary:hover { background-color: #aaa; }
 }
 
 .card.flipped { transform: rotateY(180deg); }
-
-/* Hover-Effekt */
-.card-wrapper:hover .card {
-  transform: scale(1.03) rotateY(1deg) rotateX(1deg);
-  transition: transform 0.25s ease;
-}
+.card-wrapper:hover .card { transform: scale(1.03) rotateY(1deg) rotateX(1deg); }
 
 .card-side {
   position: absolute;
@@ -155,7 +171,6 @@ button.secondary:hover { background-color: #aaa; }
   color: #222;
   text-align: center;
 }
-
 body.dark .card-front { background: linear-gradient(160deg, #2a2a33, #3a3a44); color: #f2f2f2; }
 
 .card-title { font-size: 1.2em; font-weight: bold; color: #ff3ca6; margin-bottom: 10px; }
@@ -174,7 +189,6 @@ footer {
   color: #999;
   padding: 20px 0;
 }
-
 body.dark footer { color: #aaa; }
 
 /* Mobile */
@@ -183,11 +197,30 @@ body.dark footer { color: #aaa; }
   .card-year { font-size: 3em; }
   input { width: 130px; }
 }
+
+/* Hintergrund Partikel */
+.particle {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.4;
+  background-color: white;
+  pointer-events: none;
+  animation: floatParticles linear infinite;
+}
+@keyframes floatParticles {
+  0% { transform: translateY(100vh) scale(0.5); opacity: 0; }
+  50% { opacity: 0.4; }
+  100% { transform: translateY(-50px) scale(1); opacity: 0; }
+}
 </style>
 </head>
 <body>
 
-<div class="dark-toggle" onclick="toggleDark()">🌙</div>
+<!-- Dark Mode Toggle -->
+<div class="dark-toggle">
+  <span id="darkIcon">🌞</span>
+  <div class="toggle-switch" onclick="toggleDark()"></div>
+</div>
 
 <h1>🎵 Hitster DIY</h1>
 <div class="status" id="statusText">🎧 Song anhören → 📅 Jahr aufdecken</div>
@@ -210,9 +243,7 @@ body.dark footer { color: #aaa; }
   </div>
 </div>
 
-<button id="nextRoundBtn" class="secondary" onclick="nextRound()" style="display:none;">
-  🔁 Nächste Runde
-</button>
+<button id="nextRoundBtn" class="secondary" onclick="nextRound()" style="display:none;">🔁 Nächste Runde</button>
 
 <footer>
   &copy; 2026 Simon Fritsch · Hitster DIY
@@ -225,52 +256,63 @@ const wrapper = document.getElementById("cardWrapper");
 const card = document.getElementById("card");
 const nextBtn = document.getElementById("nextRoundBtn");
 const statusText = document.getElementById("statusText");
+const darkIcon = document.getElementById('darkIcon');
 
-// Dark Mode automatisch nach System
-if(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-  document.body.classList.add('dark');
+// Dark Mode automatisch
+if(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches){
+  document.body.classList.add('dark'); darkIcon.textContent = "🌙";
 }
 
-function toggleDark() { document.body.classList.toggle('dark'); }
-
-function playSong() {
-  const code = document.getElementById("songCode").value;
-  currentSong = SONGS[code];
-  if (!currentSong) { alert("Falscher Code!"); return; }
-
-  window.open(currentSong.link, "_blank");
-  wrapper.style.display = "flex"; // Karte zentriert
-  card.classList.remove("flipped");
-  nextBtn.style.display = "none";
-  statusText.textContent = "🎶 Song läuft → Bereit zum Aufdecken";
+function toggleDark(){
+  document.body.classList.toggle('dark');
+  darkIcon.textContent = document.body.classList.contains('dark') ? "🌙" : "🌞";
 }
 
-function reveal() {
-  if (!currentSong) return;
+// Hintergrund Partikel
+const colors=['#fff','#ffe6f0','#ff3ca6','#ff85c1'];
+for(let i=0;i<40;i++){
+  const p=document.createElement('div'); p.className='particle';
+  const size=Math.random()*6+4;
+  p.style.width=size+'px'; p.style.height=size+'px';
+  p.style.left=Math.random()*100+'vw';
+  p.style.animationDuration=(5+Math.random()*10)+'s';
+  p.style.backgroundColor = colors[Math.floor(Math.random()*colors.length)];
+  document.body.appendChild(p);
+}
 
-  document.getElementById("cardTitle").textContent = currentSong.title;
-  document.getElementById("cardYear").textContent = currentSong.year;
-  document.getElementById("cardArtist").textContent = currentSong.artist;
-
+// Flip-Karte
+function playSong(){
+  const code=document.getElementById("songCode").value;
+  currentSong=SONGS[code];
+  if(!currentSong){ alert("Falscher Code!"); return; }
+  window.open(currentSong.link,"_blank");
+  wrapper.style.display="flex";
   card.classList.remove("flipped");
-  nextBtn.style.display = "none";
+  nextBtn.style.display="none";
+  statusText.textContent="🎶 Song läuft → Bereit zum Aufdecken";
+}
 
-  // Flip Animation
-  setTimeout(() => {
+function reveal(){
+  if(!currentSong) return;
+  document.getElementById("cardTitle").textContent=currentSong.title;
+  document.getElementById("cardYear").textContent=currentSong.year;
+  document.getElementById("cardArtist").textContent=currentSong.artist;
+  card.classList.remove("flipped");
+  nextBtn.style.display="none";
+  setTimeout(()=>{
     card.classList.add("flipped");
-    nextBtn.style.display = "inline-block";
-    statusText.textContent = "✅ Jahr aufgedeckt";
-  }, 250);
+    nextBtn.style.display="inline-block";
+    statusText.textContent="✅ Jahr aufgedeckt";
+  },250);
 }
 
-function nextRound() {
-  document.getElementById("songCode").value = "";
-  currentSong = null;
-
+function nextRound(){
+  document.getElementById("songCode").value="";
+  currentSong=null;
   card.classList.remove("flipped");
-  wrapper.style.display = "none";
-  nextBtn.style.display = "none";
-  statusText.textContent = "🎧 Song anhören → 📅 Jahr aufdecken";
+  wrapper.style.display="none";
+  nextBtn.style.display="none";
+  statusText.textContent="🎧 Song anhören → 📅 Jahr aufdecken";
 }
 </script>
 
