@@ -26,6 +26,7 @@ body {
   display:flex;
   flex-direction:column;
   transition: background 0.4s, color 0.4s;
+  position: relative;
 }
 body.dark { background: var(--bg-dark); color: var(--text-dark); }
 
@@ -160,6 +161,14 @@ body.dark footer { color:#aaa; }
   .card-title{ font-size:1em; }
   .card-year{ font-size:2em; }
   .card-artist{ font-size:1em; }
+
+  /* Mobile Controls absolute & zentriert */
+  .controls{
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+  }
   input[type="text"]{ width:140px; font-size:1.3em; }
 }
 </style>
