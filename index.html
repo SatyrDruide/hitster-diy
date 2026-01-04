@@ -2,68 +2,91 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
-  <title>Hitster DIY</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hitster DIY – Start</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    body {
+    /* Grundlayout */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body, html {
+      height: 100%;
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      background: linear-gradient(to bottom, #fff0f6, #ffe6f0); /* sanfter Farbverlauf */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
       text-align: center;
-      font-family: 'Arial', sans-serif;
-      background-color: #fff0f6; /* zartes Rosa */
       color: #333;
-      padding: 50px 20px;
     }
 
     h1 {
-      color: #ff69b4; /* kräftiges Rosa */
+      font-size: 3em;
+      color: #ff3ca6; /* kräftiges Rosa */
+      margin-bottom: 0.5em;
     }
 
     p {
       font-size: 1.2em;
-      margin-bottom: 30px;
+      margin-bottom: 3em;
+      max-width: 600px;
+      line-height: 1.5;
+      color: #555;
     }
 
-    .song-button {
-      display: inline-block;
-      margin: 10px;
-      padding: 15px 30px;
-      background-color: #ff69b4;
-      color: white;
-      text-decoration: none;
-      border-radius: 12px;
+    /* Start-Button */
+    .start-button {
+      padding: 20px 50px;
+      font-size: 1.5em;
       font-weight: bold;
-      transition: background 0.3s, transform 0.2s;
+      color: #fff;
+      background-color: #ff3ca6;
+      border: none;
+      border-radius: 15px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      box-shadow: 0 8px 20px rgba(255, 60, 166, 0.3);
     }
 
-    .song-button:hover {
-      background-color: #ff85c1;
-      transform: scale(1.05);
+    .start-button:hover {
+      background-color: #ff5ab0;
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 12px 25px rgba(255, 60, 166, 0.4);
+    }
+
+    /* Footer / Credits */
+    footer {
+      position: absolute;
+      bottom: 20px;
+      font-size: 0.9em;
+      color: #999;
+    }
+
+    footer a {
+      color: #ff3ca6;
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
     }
   </style>
 </head>
 <body>
   <h1>🎵 Hitster DIY</h1>
-  <p>Tippe auf einen Song, um zu starten</p>
+  <p>Willkommen zu deinem persönlichen Musikspiel! Klicke auf den Button, um das Spiel zu starten und die volle Hitster-Erfahrung zu genießen.</p>
 
-  <div id="song-list"></div>
+  <a href="play.html" class="start-button">Spiel starten</a>
 
-  <script>
-    // Beispiel-Songliste
-    const songs = ["Song 1", "Song 2", "Song 3", "Song 4", "Song 5"];
-    const container = document.getElementById("song-list");
-
-    function generateCode() {
-      return Math.floor(10000 + Math.random() * 90000); // 5-stellige Zufallszahl
-    }
-
-    songs.forEach((song, index) => {
-      const code = generateCode(); // Zufallscode pro Song
-      const link = document.createElement("a");
-      link.href = `play.html?id=${index + 1}&code=${code}`;
-      link.textContent = `${song} starten`;
-      link.className = "song-button";
-      container.appendChild(link);
-    });
-  </script>
+  <footer>
+    &copy; 2026 Simon Fritsch | Projekt: Hitster DIY
+  </footer>
 </body>
 </html>
+
 
