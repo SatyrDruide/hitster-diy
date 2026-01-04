@@ -81,7 +81,7 @@ body.dark h1 { color: var(--accent-dark); }
 .status {
   font-size: 1.1em;
   color: #777;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
   text-align: center;
   transition: color 0.4s;
 }
@@ -118,15 +118,19 @@ button:hover { transform: scale(1.05); }
 button.secondary { background-color: #bbb; box-shadow: none; }
 button.secondary:hover { background-color: #aaa; }
 
-/* Karte zentriert */
+/* Karten Container */
+.card-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px; /* Abstand zwischen Karte und Button */
+  margin-bottom: 20px;
+}
+
 .card-wrapper {
   perspective: 1200px;
   width: 280px;
   height: 420px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 40px 0 20px;
 }
 
 .card {
@@ -137,7 +141,7 @@ button.secondary:hover { background-color: #aaa; }
   transition: transform 0.9s cubic-bezier(.4,.2,.2,1);
 }
 
-.card.flipped { transform: rotateY(180deg); }
+.card.flipped { transform: rotateY(180deg) rotateZ(1deg); } /* Mikro-Flip leicht schräg */
 .card-wrapper:hover .card { transform: scale(1.03) rotateY(1deg) rotateX(1deg); }
 
 .card-side {
@@ -198,19 +202,20 @@ body.dark footer { color: #aaa; }
   input { width: 130px; }
 }
 
-/* Hintergrund Partikel */
+/* Hintergrund Noten Partikel */
 .particle {
   position: absolute;
+  width: 6px; height: 6px;
+  background-color: #fff;
   border-radius: 50%;
   opacity: 0.4;
-  background-color: white;
   pointer-events: none;
-  animation: floatParticles linear infinite;
+  animation: floatNotes linear infinite;
 }
-@keyframes floatParticles {
-  0% { transform: translateY(100vh) scale(0.5); opacity: 0; }
-  50% { opacity: 0.4; }
-  100% { transform: translateY(-50px) scale(1); opacity: 0; }
+@keyframes floatNotes {
+  0% { transform: translateY(100vh) rotate(0deg) scale(0.5); opacity: 0; }
+  50% { opacity: 0.6; }
+  100% { transform: translateY(-50px) rotate(360deg) scale(1); opacity: 0; }
 }
 </style>
 </head>
@@ -231,19 +236,20 @@ body.dark footer { color: #aaa; }
 <button onclick="playSong()">▶ Song öffnen</button>
 <button onclick="reveal()">📅 Aufdecken</button>
 
-<!-- Karte -->
-<div class="card-wrapper" id="cardWrapper" style="display:none;">
-  <div class="card" id="card">
-    <div class="card-side card-back">HITSTER<br>DIY</div>
-    <div class="card-side card-front">
-      <div class="card-title" id="cardTitle"></div>
-      <div class="card-year" id="cardYear"></div>
-      <div class="card-artist" id="cardArtist"></div>
+<!-- Kartenbereich mit Nächste-Runde-Button -->
+<div class="card-container" id="cardContainer" style="display:none;">
+  <div class="card-wrapper">
+    <div class="card" id="card">
+      <div class="card-side card-back">HITSTER<br>DIY</div>
+      <div class="card-side card-front">
+        <div class="card-title" id="cardTitle"></div>
+        <div class="card-year" id="cardYear"></div>
+        <div class="card-artist" id="cardArtist"></div>
+      </div>
     </div>
   </div>
+  <button id="nextRoundBtn" class="secondary" onclick="nextRound()" style="display:none;">🔁 Nächste Runde</button>
 </div>
-
-<button id="nextRoundBtn" class="secondary" onclick="nextRound()" style="display:none;">🔁 Nächste Runde</button>
 
 <footer>
   &copy; 2026 Simon Fritsch · Hitster DIY
@@ -252,7 +258,7 @@ body.dark footer { color: #aaa; }
 <script src="songs.js"></script>
 <script>
 let currentSong;
-const wrapper = document.getElementById("cardWrapper");
+const wrapper = document.getElementById("cardContainer");
 const card = document.getElementById("card");
 const nextBtn = document.getElementById("nextRoundBtn");
 const statusText = document.getElementById("statusText");
@@ -268,7 +274,7 @@ function toggleDark(){
   darkIcon.textContent = document.body.classList.contains('dark') ? "🌙" : "🌞";
 }
 
-// Hintergrund Partikel
+// Hintergrund Partikel (Musiknoten)
 const colors=['#fff','#ffe6f0','#ff3ca6','#ff85c1'];
 for(let i=0;i<40;i++){
   const p=document.createElement('div'); p.className='particle';
@@ -280,7 +286,7 @@ for(let i=0;i<40;i++){
   document.body.appendChild(p);
 }
 
-// Flip-Karte
+// Flip-Karte Funktionen
 function playSong(){
   const code=document.getElementById("songCode").value;
   currentSong=SONGS[code];
