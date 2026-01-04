@@ -6,166 +6,160 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-  :root {
-    --bg-light: linear-gradient(to bottom, #fff0f6, #ffe6f0);
-    --bg-dark: linear-gradient(to bottom, #1a1a1f, #2a2a33);
-    --text-light: #333;
-    --text-dark: #f2f2f2;
-    --accent-light: #ff3ca6;
-    --accent-dark: #ff5ab0;
-  }
+:root {
+  --bg-light: linear-gradient(180deg, #fff0f6, #ffe6f0);
+  --bg-dark: linear-gradient(180deg, #1a1a1f, #2a2a33);
+  --text-light: #222;
+  --text-dark: #f2f2f2;
+  --accent-light: #ff3ca6;
+  --accent-dark: #ff5ab0;
+}
 
-  body {
-    margin: 0;
-    padding: 0;
-    font-family: 'Helvetica Neue', Arial, sans-serif;
-    background: var(--bg-light);
-    color: var(--text-light);
-    text-align: center;
-    transition: background 0.4s, color 0.4s;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-  }
+body {
+  margin: 0;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  background: var(--bg-light);
+  color: var(--text-light);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  transition: background 0.4s, color 0.4s;
+  padding: 20px;
+}
 
-  body.dark {
-    background: var(--bg-dark);
-    color: var(--text-dark);
-  }
+body.dark {
+  background: var(--bg-dark);
+  color: var(--text-dark);
+}
 
-  .dark-toggle {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    font-size: 1.5em;
-    cursor: pointer;
-    user-select: none;
-  }
+.dark-toggle {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  font-size: 1.5em;
+  cursor: pointer;
+  user-select: none;
+}
 
-  h1 {
-    font-size: 3em;
-    color: var(--accent-light);
-    margin-bottom: 10px;
-    transition: color 0.4s;
-  }
+h1 {
+  font-size: 3em;
+  margin-bottom: 10px;
+  color: var(--accent-light);
+  transition: color 0.4s;
+}
 
-  body.dark h1 {
-    color: var(--accent-dark);
-  }
+body.dark h1 { color: var(--accent-dark); }
 
-  h2 {
-    font-size: 1.3em;
-    color: #555;
-    margin-bottom: 40px;
-  }
+h2 {
+  font-size: 1.3em;
+  color: #555;
+  margin-bottom: 40px;
+  text-align: center;
+  max-width: 450px;
+}
 
-  .cta-button {
-    font-size: 1.4em;
-    padding: 16px 40px;
-    border-radius: 18px;
-    border: none;
-    background-color: var(--accent-light);
-    color: #fff;
-    cursor: pointer;
-    box-shadow: 0 10px 25px rgba(255, 60, 166, 0.35);
-    transition: all 0.3s ease;
-    margin-top: 30px;
-    animation: pulse 2s infinite;
-  }
+.cta-button {
+  font-size: 1.4em;
+  padding: 16px 40px;
+  border-radius: 18px;
+  border: none;
+  background-color: var(--accent-light);
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 0 10px 25px rgba(255, 60, 166, 0.35);
+  transition: all 0.3s ease;
+  animation: pulse 2s infinite;
+  margin-top: 30px;
+}
 
-  body.dark .cta-button {
-    background-color: var(--accent-dark);
-  }
+body.dark .cta-button { background-color: var(--accent-dark); }
 
-  .cta-button:hover {
-    transform: scale(1.05);
-  }
+.cta-button:hover { transform: scale(1.05); }
 
-  @keyframes pulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.07); }
-  }
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.07); }
+}
 
-  /* Interaktive Vorschau Karte */
-  .preview-wrapper {
-    perspective: 1200px;
-    width: 280px;
-    height: 420px;
-    margin: 40px auto;
-  }
+/* ---------- Vorschau Karte ---------- */
+.preview-wrapper {
+  perspective: 1200px;
+  width: 280px;
+  height: 420px;
+  margin: 40px auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
-  .preview-card {
-    width: 100%;
-    height: 100%;
-    position: relative;
-    transform-style: preserve-3d;
-    transition: transform 0.9s cubic-bezier(.4,.2,.2,1);
-  }
+.preview-card {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.9s cubic-bezier(.4,.2,.2,1);
+}
 
-  .preview-card.flipped {
-    transform: rotateY(180deg);
-  }
+.preview-card.flipped { transform: rotateY(180deg); }
 
-  .card-side {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    border-radius: 24px;
-    backface-visibility: hidden;
-    box-shadow: 0 25px 45px rgba(0,0,0,0.25);
-    border: 1px solid rgba(255,255,255,0.45);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 26px;
-    transition: background 0.4s, color 0.4s;
-  }
+.card-side {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 24px;
+  backface-visibility: hidden;
+  box-shadow: 0 25px 45px rgba(0,0,0,0.25);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 26px;
+  transition: background 0.4s, color 0.4s;
+}
 
-  .card-back {
-    background: linear-gradient(160deg, #ff3ca6, #ff85c1);
-    color: white;
-    font-size: 2em;
-    font-weight: bold;
-    letter-spacing: 2px;
-  }
+.card-back {
+  background: linear-gradient(160deg, #ff3ca6, #ff85c1);
+  color: white;
+  font-size: 2em;
+  font-weight: bold;
+  letter-spacing: 2px;
+  text-align: center;
+}
 
-  .card-front {
-    background: linear-gradient(160deg, #ffffff, #ffe6f0);
-    transform: rotateY(180deg);
-    justify-content: space-between;
-    color: #222;
-  }
+.card-front {
+  background: linear-gradient(160deg, #ffffff, #ffe6f0);
+  transform: rotateY(180deg);
+  justify-content: space-between;
+  color: #222;
+  text-align: center;
+}
 
-  body.dark .card-front {
-    background: linear-gradient(160deg, #2a2a33, #3a3a44);
-    color: #f2f2f2;
-  }
+body.dark .card-front { background: linear-gradient(160deg, #2a2a33, #3a3a44); color: #f2f2f2; }
 
-  .card-title { font-size: 1.2em; font-weight: bold; color: #ff3ca6; margin-bottom: 10px; }
-  body.dark .card-title { color: #ff5ab0; }
+.card-title { font-size: 1.2em; font-weight: bold; color: #ff3ca6; margin-bottom: 10px; }
+body.dark .card-title { color: #ff5ab0; }
 
-  .card-year { font-size: 4em; font-weight: 900; color: #222; margin-bottom: 10px; }
-  body.dark .card-year { color: #f2f2f2; }
+.card-year { font-size: 4em; font-weight: 900; color: #222; margin-bottom: 10px; }
+body.dark .card-year { color: #f2f2f2; }
 
-  .card-artist { font-size: 1.2em; color: #555; }
-  body.dark .card-artist { color: #ccc; }
+.card-artist { font-size: 1.2em; color: #555; }
+body.dark .card-artist { color: #ccc; }
 
-  footer {
-    margin-top: 60px;
-    font-size: 0.85em;
-    color: #999;
-  }
+footer {
+  margin-top: auto;
+  font-size: 0.85em;
+  color: #999;
+  padding: 20px 0;
+}
 
-  body.dark footer { color: #aaa; }
+body.dark footer { color: #aaa; }
 
-  @media (max-width:480px) {
-    .preview-wrapper { width: 220px; height: 330px; }
-    .card-year { font-size: 3em; }
-  }
+@media (max-width:480px) {
+  .preview-wrapper { width: 220px; height: 330px; }
+  .card-year { font-size: 3em; }
+}
 </style>
 </head>
 <body>
@@ -175,8 +169,8 @@
 <h1>🎵 Hitster DIY</h1>
 <h2>Errate Songs. Decke das Jahr auf. Erlebe Musik neu!</h2>
 
-<!-- Interaktive Vorschau -->
-<div class="preview-wrapper" id="previewWrapper">
+<!-- Interaktive Vorschau Karte -->
+<div class="preview-wrapper">
   <div class="preview-card" id="previewCard">
     <div class="card-side card-back">HITSTER<br>DIY</div>
     <div class="card-side card-front">
@@ -197,19 +191,12 @@
 <script>
 const previewCard = document.getElementById("previewCard");
 
-function toggleDark() {
-  document.body.classList.toggle("dark");
-}
+function toggleDark() { document.body.classList.toggle("dark"); }
 
-// Flip-Animation Loop für Vorschau
-setInterval(() => {
-  previewCard.classList.toggle("flipped");
-}, 3000);
+// Flip Animation Vorschau
+setInterval(() => { previewCard.classList.toggle("flipped"); }, 3000);
 
-// CTA Button
-function startGame() {
-  window.location.href = "play.html";
-}
+function startGame() { window.location.href = "play.html"; }
 </script>
 
 </body>
