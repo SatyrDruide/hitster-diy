@@ -2,91 +2,182 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
-  <title>Hitster DIY – Start</title>
+  <title>Hitster DIY</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <style>
-    /* Grundlayout */
+    :root {
+      --bg: #fff0f6;
+      --bg-soft: #ffe6f0;
+      --text: #333;
+      --accent: #ff3ca6;
+      --card-back-1: #ff3ca6;
+      --card-back-2: #ff85c1;
+    }
+
+    body.dark {
+      --bg: #1a1a1f;
+      --bg-soft: #2a2a33;
+      --text: #f2f2f2;
+      --accent: #ff5ab0;
+    }
+
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
     }
 
-    body, html {
-      height: 100%;
+    body {
+      min-height: 100vh;
       font-family: 'Helvetica Neue', Arial, sans-serif;
-      background: linear-gradient(to bottom, #fff0f6, #ffe6f0); /* sanfter Farbverlauf */
+      background: linear-gradient(to bottom, var(--bg), var(--bg-soft));
+      color: var(--text);
       display: flex;
       justify-content: center;
       align-items: center;
-      flex-direction: column;
       text-align: center;
-      color: #333;
+      padding: 40px 20px;
+      transition: background 0.4s, color 0.4s;
+    }
+
+    .container {
+      max-width: 900px;
+      width: 100%;
+      position: relative;
+    }
+
+    /* Dark Mode Toggle */
+    .toggle {
+      position: absolute;
+      top: 0;
+      right: 0;
+      font-size: 1.4em;
+      cursor: pointer;
+      user-select: none;
+      opacity: 0.7;
+    }
+
+    .toggle:hover {
+      opacity: 1;
     }
 
     h1 {
-      font-size: 3em;
-      color: #ff3ca6; /* kräftiges Rosa */
-      margin-bottom: 0.5em;
+      font-size: 3.2em;
+      color: var(--accent);
+      margin-bottom: 10px;
     }
 
-    p {
-      font-size: 1.2em;
-      margin-bottom: 3em;
-      max-width: 600px;
-      line-height: 1.5;
-      color: #555;
+    .claim {
+      font-size: 1.3em;
+      opacity: 0.85;
+      margin-bottom: 50px;
     }
 
-    /* Start-Button */
-    .start-button {
-      padding: 20px 50px;
-      font-size: 1.5em;
+    /* 3 Steps */
+    .steps {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      margin-bottom: 60px;
+      flex-wrap: wrap;
+    }
+
+    .step {
+      max-width: 200px;
+      font-size: 1.1em;
+      line-height: 1.4;
+    }
+
+    .step span {
+      display: block;
+      font-size: 2em;
+      margin-bottom: 10px;
+    }
+
+    /* Fake Karte */
+    .card-preview {
+      margin: 0 auto 60px;
+      width: 220px;
+      height: 340px;
+      border-radius: 22px;
+      background: linear-gradient(160deg, var(--card-back-1), var(--card-back-2));
+      color: white;
       font-weight: bold;
-      color: #fff;
-      background-color: #ff3ca6;
-      border: none;
-      border-radius: 15px;
-      cursor: pointer;
-      text-decoration: none;
-      transition: all 0.3s ease;
-      box-shadow: 0 8px 20px rgba(255, 60, 166, 0.3);
+      font-size: 2em;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      letter-spacing: 2px;
+      box-shadow: 0 25px 50px rgba(0,0,0,0.25);
+      transform: rotate(-6deg);
     }
 
-    .start-button:hover {
-      background-color: #ff5ab0;
+    /* Start Button */
+    .start {
+      display: inline-block;
+      padding: 18px 55px;
+      font-size: 1.4em;
+      font-weight: bold;
+      color: white;
+      background-color: var(--accent);
+      border-radius: 16px;
+      text-decoration: none;
+      box-shadow: 0 10px 30px rgba(255, 60, 166, 0.4);
+      transition: transform 0.25s, box-shadow 0.25s;
+    }
+
+    .start:hover {
       transform: translateY(-3px) scale(1.05);
-      box-shadow: 0 12px 25px rgba(255, 60, 166, 0.4);
+      box-shadow: 0 15px 40px rgba(255, 60, 166, 0.5);
     }
 
-    /* Footer / Credits */
     footer {
-      position: absolute;
-      bottom: 20px;
+      margin-top: 60px;
       font-size: 0.9em;
-      color: #999;
-    }
-
-    footer a {
-      color: #ff3ca6;
-      text-decoration: none;
-    }
-
-    footer a:hover {
-      text-decoration: underline;
+      opacity: 0.6;
     }
   </style>
 </head>
 <body>
-  <h1>🎵 Hitster DIY</h1>
-  <p>Willkommen zu deinem persönlichen Musikspiel! Klicke auf den Button, um das Spiel zu starten und die volle Hitster-Erfahrung zu genießen.</p>
 
-  <a href="play.html" class="start-button">Spiel starten</a>
+  <div class="container">
+    <div class="toggle" onclick="toggleDark()">🌙</div>
 
-  <footer>
-    &copy; 2026 Simon Fritsch | Projekt: Hitster DIY
-  </footer>
+    <h1>🎵 Hitster DIY</h1>
+    <div class="claim">Das Musik-Zeitreise-Spiel für Zuhause</div>
+
+    <div class="steps">
+      <div class="step">
+        <span>🎧</span>
+        Song anhören
+      </div>
+      <div class="step">
+        <span>🧠</span>
+        Jahr erraten
+      </div>
+      <div class="step">
+        <span>📅</span>
+        Karte aufdecken
+      </div>
+    </div>
+
+    <div class="card-preview">
+      HITSTER<br>DIY
+    </div>
+
+    <a href="play.html" class="start">Spiel starten</a>
+
+    <footer>
+      © 2026 Simon Fritsch · Made for local game nights
+    </footer>
+  </div>
+
+  <script>
+    function toggleDark() {
+      document.body.classList.toggle("dark");
+    }
+  </script>
+
 </body>
 </html>
-
-
