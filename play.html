@@ -26,7 +26,6 @@ body {
   display:flex;
   flex-direction:column;
   transition: background 0.4s, color 0.4s;
-  position: relative;
 }
 body.dark { background: var(--bg-dark); color: var(--text-dark); }
 
@@ -69,20 +68,7 @@ h2 {
 body.dark h2 { color: var(--accent-dark); text-shadow:0 0 12px rgba(255,90,176,0.7); }
 @keyframes pulse {0%,100%{transform:scale(1);}50%{transform:scale(1.05);}}
 
-/* Controls */
-.controls {
-  display:flex; flex-direction:column; align-items:center; margin-bottom:20px;
-  z-index: 5;
-  position: relative;
-}
-input[type="text"] {
-  font-size:1.2em; padding:10px; width:160px;
-  border-radius:10px; border:2px solid var(--accent-light);
-  text-align:center; margin-bottom:10px; outline:none;
-  transition: border 0.3s;
-}
-input.error { border-color: var(--error-color); }
-body.dark input { border-color: var(--accent-dark); }
+/* Fehleranzeige */
 .error-message {
   color: var(--error-color);
   font-size:0.9em;
@@ -90,34 +76,27 @@ body.dark input { border-color: var(--accent-dark); }
   display:none;
 }
 
-/* Buttons */
-button {
-  font-size:1.2em; padding:12px 30px; margin:5px;
-  border:none; border-radius:12px; cursor:pointer;
-  color:#fff; background-color: var(--accent-light);
-  box-shadow:0 8px 20px rgba(255,60,166,0.35);
-  transition: all 0.25s ease;
-}
-button:hover { transform:scale(1.05); background-color:#ff5ab0; }
-body.dark button { background-color: var(--accent-dark); }
-
-/* Karte absolut zentriert */
-.card-wrapper {
-  position: absolute;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  width: 280px; height: 420px;
-  perspective: 1200px;
-  display: none;
-  z-index: 1;
+/* Karte-Container */
+.card-container {
+  flex:1;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:20px;
 }
 .card {
+  width:280px;
+  height:420px;
+  perspective:1200px;
+  display:none;
+}
+.card-inner {
   width:100%; height:100%;
   position: relative;
   transform-style: preserve-3d;
   transition: transform 0.8s cubic-bezier(.4,.2,.2,1);
 }
-.card.flipped { transform: rotateY(180deg); }
+.card-inner.flipped { transform: rotateY(180deg); }
 .card-side {
   position:absolute; width:100%; height:100%;
   border-radius:22px; backface-visibility:hidden;
@@ -141,13 +120,38 @@ body.dark .card-year { color:#fff; }
 .card-artist { font-size:1.2em; color:#555;}
 body.dark .card-artist { color:#ccc; }
 
+/* Controls */
+.controls {
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  padding:20px;
+}
+input[type="text"] {
+  font-size:1.2em; padding:10px; width:160px;
+  border-radius:10px; border:2px solid var(--accent-light);
+  text-align:center; margin-bottom:10px; outline:none;
+  transition: border 0.3s;
+}
+input.error { border-color: var(--error-color); }
+body.dark input { border-color: var(--accent-dark); }
+button {
+  font-size:1.2em; padding:12px 30px; margin:5px;
+  border:none; border-radius:12px; cursor:pointer;
+  color:#fff; background-color: var(--accent-light);
+  box-shadow:0 8px 20px rgba(255,60,166,0.35);
+  transition: all 0.25s ease;
+}
+button:hover { transform:scale(1.05); background-color:#ff5ab0; }
+body.dark button { background-color: var(--accent-dark); }
+
 /* Footer */
-footer { font-size:0.9em; color:#999; margin-top:auto; text-align:center; padding:10px 0; }
+footer { font-size:0.9em; color:#999; text-align:center; padding:10px 0; }
 body.dark footer { color:#aaa; }
 
 /* Mobile */
 @media(max-width:480px){
-  .card-wrapper{ width:200px; height:300px; }
+  .card{ width:200px; height:300px; }
   .card-title{ font-size:1em; }
   .card-year{ font-size:2em; }
   .card-artist{ font-size:1em; }
@@ -164,23 +168,24 @@ body.dark footer { color:#aaa; }
 
 <h2>🎵 HITSTER DIY</h2>
 
-<div class="controls">
-  <div class="error-message" id="errorMessage">Falscher Code!</div>
-  <input type="text" id="songCode" maxlength="5" placeholder="Songnummer">
-  <button onclick="playSong()">▶ Song öffnen</button>
-  <button id="revealButton" onclick="reveal()">📅 Aufdecken</button>
-</div>
-
-<!-- Karte absolut mittig -->
-<div class="card-wrapper" id="cardWrapper">
+<div class="card-container">
   <div class="card" id="card">
-    <div class="card-side card-back">HITSTER DIY</div>
-    <div class="card-side card-front">
-      <div class="card-title" id="cardTitle"></div>
-      <div class="card-year" id="cardYear"></div>
-      <div class="card-artist" id="cardArtist"></div>
+    <div class="card-inner" id="cardInner">
+      <div class="card-side card-back">HITSTER DIY</div>
+      <div class="card-side card-front">
+        <div class="card-title" id="cardTitle"></div>
+        <div class="card-year" id="cardYear"></div>
+        <div class="card-artist" id="cardArtist"></div>
+      </div>
     </div>
   </div>
+</div>
+
+<div class="controls">
+  <div class="error-message" id="errorMessage">Falscher Code!</div>
+  <input type="text" id="songCode" maxlength="5" placeholder="12345">
+  <button onclick="playSong()">▶ Song öffnen</button>
+  <button id="revealButton" onclick="reveal()">📅 Aufdecken</button>
 </div>
 
 <footer>&copy; 2026 Simon Fritsch | HITSTER DIY</footer>
@@ -211,7 +216,6 @@ function playSong(){
     songInput.classList.add('error');
     return;
   }
-  // korrekt → Fehler zurücksetzen
   errorMessage.style.display="none";
   songInput.classList.remove('error');
   window.open(currentSong.link,"_blank");
@@ -219,8 +223,8 @@ function playSong(){
 
 // Aufdecken → Nächste Runde
 const revealBtn = document.getElementById("revealButton");
-const cardWrapper = document.getElementById("cardWrapper");
 const card = document.getElementById("card");
+const cardInner = document.getElementById("cardInner");
 
 function reveal(){
   if(!currentSong){
@@ -235,24 +239,24 @@ function reveal(){
   document.getElementById("cardYear").textContent=currentSong.year;
   document.getElementById("cardArtist").textContent=currentSong.artist;
 
-  cardWrapper.style.display="block";
-  card.classList.remove("flipped");
-  setTimeout(()=>{ card.classList.add("flipped"); },150);
+  card.style.display="block";
+  cardInner.classList.remove("flipped");
+  setTimeout(()=>{ cardInner.classList.add("flipped"); },150);
 
   revealBtn.textContent="⏭ Nächste Runde";
   revealBtn.onclick=nextRound;
 }
 
 function nextRound(){
-  cardWrapper.style.display="none";
-  card.classList.remove("flipped");
+  card.style.display="none";
+  cardInner.classList.remove("flipped");
   songInput.value="";
   currentSong=null;
   revealBtn.textContent="📅 Aufdecken";
   revealBtn.onclick=reveal;
 }
 
-// Fehler zurücksetzen beim tippen
+// Fehler zurücksetzen beim Tippen
 songInput.addEventListener('input', ()=>{
   errorMessage.style.display="none";
   songInput.classList.remove('error');
