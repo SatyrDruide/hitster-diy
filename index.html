@@ -4,15 +4,66 @@
   <meta charset="UTF-8">
   <title>Hitster DIY</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      text-align: center;
+      font-family: 'Arial', sans-serif;
+      background-color: #fff0f6; /* zartes Rosa */
+      color: #333;
+      padding: 50px 20px;
+    }
+
+    h1 {
+      color: #ff69b4; /* kräftiges Rosa */
+    }
+
+    p {
+      font-size: 1.2em;
+      margin-bottom: 30px;
+    }
+
+    .song-button {
+      display: inline-block;
+      margin: 10px;
+      padding: 15px 30px;
+      background-color: #ff69b4;
+      color: white;
+      text-decoration: none;
+      border-radius: 12px;
+      font-weight: bold;
+      transition: background 0.3s, transform 0.2s;
+    }
+
+    .song-button:hover {
+      background-color: #ff85c1;
+      transform: scale(1.05);
+    }
+  </style>
 </head>
-<body style="text-align:center;font-family:sans-serif">
+<body>
   <h1>🎵 Hitster DIY</h1>
   <p>Tippe auf einen Song, um zu starten</p>
-  
-  <a href="play.html?id=1">Song 1 starten</a><br>
-  <a href="play.html?id=2">Song 2 starten</a><br>
-  <a href="play.html?id=3">Song 3 starten</a>
+
+  <div id="song-list"></div>
+
+  <script>
+    // Beispiel-Songliste
+    const songs = ["Song 1", "Song 2", "Song 3", "Song 4", "Song 5"];
+    const container = document.getElementById("song-list");
+
+    function generateCode() {
+      return Math.floor(10000 + Math.random() * 90000); // 5-stellige Zufallszahl
+    }
+
+    songs.forEach((song, index) => {
+      const code = generateCode(); // Zufallscode pro Song
+      const link = document.createElement("a");
+      link.href = `play.html?id=${index + 1}&code=${code}`;
+      link.textContent = `${song} starten`;
+      link.className = "song-button";
+      container.appendChild(link);
+    });
+  </script>
 </body>
 </html>
-
 
