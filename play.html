@@ -15,7 +15,7 @@
   --accent-dark: #ff5ab0;
 }
 
-/* Body und Dark Mode */
+/* Body */
 body {
   margin:0;
   font-family:'Helvetica Neue', Arial, sans-serif;
@@ -25,6 +25,7 @@ body {
   display:flex;
   flex-direction:column;
   transition: background 0.4s, color 0.4s;
+  position: relative;
 }
 body.dark { background: var(--bg-dark); color: var(--text-dark); }
 
@@ -32,6 +33,7 @@ body.dark { background: var(--bg-dark); color: var(--text-dark); }
 .dark-toggle {
   position: fixed; top:20px; right:20px;
   display:flex; align-items:center; cursor:pointer;
+  z-index: 10;
 }
 .toggle-switch {
   position: relative;
@@ -68,7 +70,9 @@ body.dark h2 { color: var(--accent-dark); text-shadow:0 0 12px rgba(255,90,176,0
 
 /* Controls */
 .controls {
-  display:flex; flex-direction:column; align-items:center; margin-bottom:30px;
+  display:flex; flex-direction:column; align-items:center; margin-bottom:20px;
+  z-index: 5;
+  position: relative;
 }
 input[type="text"] {
   font-size:1.2em; padding:10px; width:160px;
@@ -76,6 +80,7 @@ input[type="text"] {
   text-align:center; margin-bottom:10px; outline:none;
 }
 body.dark input { border-color: var(--accent-dark); }
+
 button {
   font-size:1.2em; padding:12px 30px; margin:5px;
   border:none; border-radius:12px; cursor:pointer;
@@ -86,32 +91,48 @@ button {
 button:hover { transform:scale(1.05); background-color:#ff5ab0; }
 body.dark button { background-color: var(--accent-dark); }
 
-/* Karte Container – vertikal mittig */
-.card-container {
-  flex:1;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  width:100%;
+/* Karte absolut zentriert */
+.card-wrapper {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 280px; height: 420px;
+  perspective: 1200px;
+  display: none;
+  z-index: 1;
 }
-
-/* Karte */
-.card-wrapper { perspective:1200px; width:280px; height:420px; display:none; }
-.card { width:100%; height:100%; position:relative; transform-style:preserve-3d; transition: transform 0.8s cubic-bezier(.4,.2,.2,1); }
+.card {
+  width:100%; height:100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.8s cubic-bezier(.4,.2,.2,1);
+}
 .card.flipped { transform: rotateY(180deg); }
-.card-side { position:absolute; width:100%; height:100%; border-radius:22px; backface-visibility:hidden; box-shadow:0 20px 40px rgba(0,0,0,0.25); display:flex; flex-direction:column; justify-content:center; align-items:center; padding:25px; transition:background 0.4s,color 0.4s; }
-.card-back { background: linear-gradient(160deg, var(--accent-light), #ff85c1); color:white; font-size:2em; font-weight:bold; letter-spacing:2px; }
-.card-front { background: linear-gradient(160deg,#fff,#ffe6f0); transform:rotateY(180deg); justify-content:space-between; }
+.card-side {
+  position:absolute; width:100%; height:100%;
+  border-radius:22px; backface-visibility:hidden;
+  box-shadow:0 20px 40px rgba(0,0,0,0.25);
+  display:flex; flex-direction:column; justify-content:center; align-items:center;
+  padding:25px; transition: background 0.4s, color 0.4s;
+}
+.card-back {
+  background: linear-gradient(160deg, var(--accent-light), #ff85c1);
+  color:white; font-size:2em; font-weight:bold; letter-spacing:2px;
+}
+.card-front {
+  background: linear-gradient(160deg,#fff,#ffe6f0);
+  transform:rotateY(180deg); justify-content:space-between;
+}
 body.dark .card-front { background: linear-gradient(160deg,#2a2a33,#1a1a26); }
-.card-title { font-size:1.2em; font-weight:bold; color:var(--accent-light); margin-bottom:10px; }
+.card-title { font-size:1.2em; font-weight:bold; color:var(--accent-light); margin-bottom:10px;}
 body.dark .card-title { color:var(--accent-dark); }
-.card-year { font-size:3em; font-weight:900; color:#222; margin-bottom:8px; }
+.card-year { font-size:3em; font-weight:900; color:#222; margin-bottom:8px;}
 body.dark .card-year { color:#fff; }
-.card-artist { font-size:1.2em; color:#555; }
+.card-artist { font-size:1.2em; color:#555;}
 body.dark .card-artist { color:#ccc; }
 
 /* Footer */
-footer { font-size:0.9em; color:#999; margin-top:20px; }
+footer { font-size:0.9em; color:#999; margin-top:auto; text-align:center; padding:10px 0; }
 body.dark footer { color:#aaa; }
 
 /* Mobile */
@@ -139,15 +160,14 @@ body.dark footer { color:#aaa; }
   <button id="revealButton" onclick="reveal()">📅 Aufdecken</button>
 </div>
 
-<div class="card-container">
-  <div class="card-wrapper" id="cardWrapper">
-    <div class="card" id="card">
-      <div class="card-side card-back">HITSTER DIY</div>
-      <div class="card-side card-front">
-        <div class="card-title" id="cardTitle"></div>
-        <div class="card-year" id="cardYear"></div>
-        <div class="card-artist" id="cardArtist"></div>
-      </div>
+<!-- Karte absolut mittig -->
+<div class="card-wrapper" id="cardWrapper">
+  <div class="card" id="card">
+    <div class="card-side card-back">HITSTER DIY</div>
+    <div class="card-side card-front">
+      <div class="card-title" id="cardTitle"></div>
+      <div class="card-year" id="cardYear"></div>
+      <div class="card-artist" id="cardArtist"></div>
     </div>
   </div>
 </div>
@@ -186,9 +206,11 @@ function reveal(){
   document.getElementById("cardTitle").textContent=currentSong.title;
   document.getElementById("cardYear").textContent=currentSong.year;
   document.getElementById("cardArtist").textContent=currentSong.artist;
+
   cardWrapper.style.display="block";
   card.classList.remove("flipped");
   setTimeout(()=>{ card.classList.add("flipped"); },150);
+
   revealBtn.textContent="⏭ Nächste Runde";
   revealBtn.onclick=nextRound;
 }
