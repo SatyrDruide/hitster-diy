@@ -26,9 +26,9 @@ body {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  transition: background 0.4s, color 0.4s;
   overflow: hidden;
   padding: 20px;
+  transition: background 0.4s, color 0.4s;
 }
 
 body.dark {
@@ -36,14 +36,45 @@ body.dark {
   color: var(--text-dark);
 }
 
-/* Dark Mode Toggle */
+/* Dark Mode Slider */
 .dark-toggle {
-  position: absolute;
+  position: fixed;
   top: 20px;
   right: 20px;
-  font-size: 1.5em;
+  display: flex;
+  align-items: center;
   cursor: pointer;
   user-select: none;
+}
+
+.toggle-switch {
+  position: relative;
+  width: 50px;
+  height: 26px;
+  background: #ccc;
+  border-radius: 13px;
+  margin-left: 10px;
+  transition: background 0.3s;
+}
+
+.toggle-switch::after {
+  content: '';
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  background: white;
+  border-radius: 50%;
+  top: 2px;
+  left: 2px;
+  transition: all 0.3s;
+}
+
+body.dark .toggle-switch {
+  background: #666;
+}
+
+body.dark .toggle-switch::after {
+  transform: translateX(24px);
 }
 
 /* Header */
@@ -51,17 +82,18 @@ h1 {
   font-size: 3em;
   margin-bottom: 10px;
   color: var(--accent-light);
+  text-align: center;
   transition: color 0.4s;
 }
 
 body.dark h1 { color: var(--accent-dark); }
 
 h2 {
-  font-size: 1.3em;
+  font-size: 1.2em;
   color: #555;
   margin-bottom: 40px;
   text-align: center;
-  max-width: 450px;
+  max-width: 400px;
 }
 
 /* CTA Button */
@@ -88,16 +120,16 @@ body.dark .cta-button { background-color: var(--accent-dark); }
   50% { transform: scale(1.07); }
 }
 
-/* Vorschau-Karte */
+/* Vorschau-Karte zentriert */
 .preview-wrapper {
   perspective: 1200px;
   width: 280px;
   height: 420px;
-  margin: 40px auto;
   display: flex;
   justify-content: center;
   align-items: center;
-  position: relative;
+  margin: 0 auto;
+  flex-shrink: 0;
 }
 
 .preview-card {
@@ -109,6 +141,11 @@ body.dark .cta-button { background-color: var(--accent-dark); }
 }
 
 .preview-card.flipped { transform: rotateY(180deg); }
+
+/* Hover Effekte */
+.card-wrapper:hover .preview-card {
+  transform: scale(1.03) rotateY(1deg) rotateX(1deg);
+}
 
 .card-side {
   position: absolute;
@@ -163,7 +200,7 @@ footer {
 
 body.dark footer { color: #aaa; }
 
-/* Mobile */
+/* Mobile Optimierung */
 @media (max-width:480px) {
   .preview-wrapper { width: 220px; height: 330px; }
   .card-year { font-size: 3em; }
@@ -188,7 +225,11 @@ body.dark footer { color: #aaa; }
 </head>
 <body>
 
-<div class="dark-toggle" onclick="toggleDark()">🌙</div>
+<!-- Dark Mode Toggle -->
+<div class="dark-toggle">
+  <span id="darkIcon">🌞</span>
+  <div class="toggle-switch" onclick="toggleDark()"></div>
+</div>
 
 <h1>🎵 Hitster DIY</h1>
 <h2>Errate Songs. Decke das Jahr auf. Erlebe Musik neu!</h2>
@@ -205,7 +246,7 @@ body.dark footer { color: #aaa; }
   </div>
 </div>
 
-<!-- CTA -->
+<!-- CTA Button -->
 <button class="cta-button" onclick="startGame()">▶ Spiel starten</button>
 
 <footer>
@@ -213,30 +254,35 @@ body.dark footer { color: #aaa; }
 </footer>
 
 <script>
-// Dark Mode automatisch nach System
-if(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+// Dark Mode Automatik
+const darkIcon = document.getElementById('darkIcon');
+if(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches){
   document.body.classList.add('dark');
+  darkIcon.textContent = "🌙";
 }
 
-function toggleDark() { document.body.classList.toggle('dark'); }
+function toggleDark(){
+  document.body.classList.toggle('dark');
+  darkIcon.textContent = document.body.classList.contains('dark') ? "🌙" : "🌞";
+}
 
-// Flip Animation Vorschau
-const previewCard = document.getElementById('previewCard');
-setInterval(() => { previewCard.classList.toggle('flipped'); }, 3000);
+// Flip-Karte Animation
+const previewCard = document.getElementById("previewCard");
+setInterval(()=>{ previewCard.classList.toggle("flipped"); }, 3000);
 
 // CTA
-function startGame() { window.location.href = "play.html"; }
+function startGame(){ window.location.href = "play.html"; }
 
-// Hintergrund Partikel erzeugen
-const colors = ['#fff', '#ffe6f0', '#ff3ca6', '#ff85c1'];
+// Hintergrundpartikel
+const colors = ['#fff','#ffe6f0','#ff3ca6','#ff85c1'];
 for(let i=0;i<40;i++){
   const p = document.createElement('div');
-  p.className = 'particle';
+  p.className='particle';
   const size = Math.random()*6+4;
-  p.style.width = size+'px';
-  p.style.height = size+'px';
-  p.style.left = Math.random()*100+'vw';
-  p.style.animationDuration = (5+Math.random()*10)+'s';
+  p.style.width=size+'px';
+  p.style.height=size+'px';
+  p.style.left=Math.random()*100+'vw';
+  p.style.animationDuration=(5+Math.random()*10)+'s';
   p.style.backgroundColor = colors[Math.floor(Math.random()*colors.length)];
   document.body.appendChild(p);
 }
