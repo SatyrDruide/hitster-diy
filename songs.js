@@ -2,15 +2,15 @@ const SONGS = {
   "58342": { link: "https://open.spotify.com/intl-de/track/0oIVNEkOgvOU9yG9oW13xC?si=20f364812ca94134", year: 1996, title: "Auf gute Freunde", artist: "Böhse Onkelz" },
   "49215": { link: "https://open.spotify.com/intl-de/track/5sm41EJGqYX4DGb16JCEqc?si=299f832533684f8b", year: 2020, title: "Kuchen und Bier", artist: "Böhse Onkelz" },
   "76301": { link: "https://open.spotify.com/intl-de/track/0wEB03sfM4R0QVQJnKulX4?si=db8208f28bbb4a0c", year: 1990, title: "Nichts ist für die Ewigkeit", artist: "Böhse Onkelz" },
-  "61827": { link: "https://open.spotify.com/intl-de/track/6zP4Utvok4QRXlNYBZkpGa?si=67554e8dea934c9f", year: 2023, title: "Kleid und Krawall", artist: "Ilkamel" },
+  "61827": { link: "https://open.spotify.com/intl-de/track/6zP4Utvok4QRXlNYBZkpGa?si=67554e8dea934c9f", year: 2023, title: "Keta und Krawall", artist: "Ikkimel" },
   "73549": { link: "https://open.spotify.com/intl-de/track/0b85BAqtnPxgxHn0nkegXd?si=6659ba6410c54bb8", year: 2017, title: "Jim Beam und Voddi", artist: "AK Ausserkontrolle, Bonez MC" },
   "28490": { link: "https://open.spotify.com/intl-de/track/1B2s3CpX2PV0YN7DkLSQ4b?si=30da7b379b89473a", year: 2015, title: "069", artist: "Haftbefehl" },
   "92714": { link: "https://open.spotify.com/intl-de/track/05Mp2UJulSttxQ4E6hQPH3?si=56d29e7c78644004", year: 2016, title: "Ohne mein Team", artist: "Bonez MC, RAF Camora, Maxwell" },
   "65823": { link: "https://open.spotify.com/intl-de/track/2WQ09wqQBIOor7Q0VpIDBK?si=ada4f9cd8cf44aec", year: 2009, title: "Rock that body", artist: "Black Eyed Peas" },
   "71469": { link: "https://open.spotify.com/intl-de/track/116H0KvKr2Zl4RPuVBruDO?si=d61f6de381ca4c7e", year: 2018, title: "MIA", artist: "Bad Bunny, Drake" },
   "83912": { link: "https://open.spotify.com/intl-de/track/6GyFP1nfCDB8lbD2bG0Hq9?si=7aabc5b46c344442", year: 2011, title: "Midnight City", artist: "M83" },
-  "19278": { link: "https://open.spotify.com/intl-de/track/6pDVyh6jCAablXFc6yc2bJ?si=a2b50b5bf9844736", year: 2025, title: "Kunst und Musik", artist: "Jodast" },
-  "35781": { link: "https://open.spotify.com/intl-de/track/0uHrMbMv3c78398pIANDqR?si=34ca4a8b0af14a98", year: 2024, title: "Europapa", artist: "Jodast" },
+  "19278": { link: "https://open.spotify.com/intl-de/track/6pDVyh6jCAablXFc6yc2bJ?si=a2b50b5bf9844736", year: 2025, title: "Kunst und Musik", artist: "Joost" },
+  "35781": { link: "https://open.spotify.com/intl-de/track/0uHrMbMv3c78398pIANDqR?si=34ca4a8b0af14a98", year: 2024, title: "Europapa", artist: "Joost" },
   "64157": { link: "https://open.spotify.com/intl-de/track/6AxCr5G75R5rqyNCYWVpTo?si=0074f189bc97425d", year: 2010, title: "Higher", artist: "Taio Cruz, Kylie Minogue" },
   "87430": { link: "https://open.spotify.com/intl-de/track/3fVnlF4pGqWI9flVENcT28?si=6182ff63c66743b3", year: 2014, title: "Wildest Dreams", artist: "Taylor Swift" },
   "52983": { link: "https://open.spotify.com/intl-de/track/7fLzbEOBOae9lUnOwr7Tse?si=d7c63348039e438d", year: 2010, title: "Memories", artist: "David Guetta" },
@@ -35,3 +35,4 @@ const SONGS = {
   "36095": { link: "https://open.spotify.com/intl-de/track/4ih3dyFZoeTdaeJW9mPbOI?si=bc8faebc4c7d458c", year: 1993, title: "Mr. Vain", artist: "Culture Beat" },
   "51748": { link: "https://open.spotify.com/intl-de/track/4TOGkYS141L15SkVosAp7Z?si=82479da72f844f5b", year: 1992, title: "It's my life", artist: "Dr. Alban" }
 };
+
