@@ -13,6 +13,7 @@
   --text-dark: #f2f2f2;
   --accent-light: #ff3ca6;
   --accent-dark: #ff5ab0;
+  --error-color: #ff4d4d;
 }
 
 /* Body */
@@ -78,9 +79,18 @@ input[type="text"] {
   font-size:1.2em; padding:10px; width:160px;
   border-radius:10px; border:2px solid var(--accent-light);
   text-align:center; margin-bottom:10px; outline:none;
+  transition: border 0.3s;
 }
+input.error { border-color: var(--error-color); }
 body.dark input { border-color: var(--accent-dark); }
+.error-message {
+  color: var(--error-color);
+  font-size:0.9em;
+  margin-bottom:5px;
+  display:none;
+}
 
+/* Buttons */
 button {
   font-size:1.2em; padding:12px 30px; margin:5px;
   border:none; border-radius:12px; cursor:pointer;
@@ -155,7 +165,8 @@ body.dark footer { color:#aaa; }
 <h2>🎵 HITSTER DIY</h2>
 
 <div class="controls">
-  <input type="text" id="songCode" maxlength="5" placeholder="12345">
+  <div class="error-message" id="errorMessage">Falscher Code!</div>
+  <input type="text" id="songCode" maxlength="5" placeholder="Songnummer">
   <button onclick="playSong()">▶ Song öffnen</button>
   <button id="revealButton" onclick="reveal()">📅 Aufdecken</button>
 </div>
@@ -189,10 +200,20 @@ function toggleDark(){
 }
 
 // Song öffnen
+const songInput = document.getElementById('songCode');
+const errorMessage = document.getElementById('errorMessage');
+
 function playSong(){
-  const code = document.getElementById('songCode').value;
+  const code = songInput.value;
   currentSong = SONGS[code];
-  if(!currentSong){ alert('Falscher Code!'); return; }
+  if(!currentSong){
+    errorMessage.style.display="block";
+    songInput.classList.add('error');
+    return;
+  }
+  // korrekt → Fehler zurücksetzen
+  errorMessage.style.display="none";
+  songInput.classList.remove('error');
   window.open(currentSong.link,"_blank");
 }
 
@@ -202,7 +223,14 @@ const cardWrapper = document.getElementById("cardWrapper");
 const card = document.getElementById("card");
 
 function reveal(){
-  if(!currentSong){ alert('Zuerst Song öffnen!'); return; }
+  if(!currentSong){
+    errorMessage.style.display="block";
+    songInput.classList.add('error');
+    return;
+  }
+  errorMessage.style.display="none";
+  songInput.classList.remove('error');
+
   document.getElementById("cardTitle").textContent=currentSong.title;
   document.getElementById("cardYear").textContent=currentSong.year;
   document.getElementById("cardArtist").textContent=currentSong.artist;
@@ -218,11 +246,17 @@ function reveal(){
 function nextRound(){
   cardWrapper.style.display="none";
   card.classList.remove("flipped");
-  document.getElementById('songCode').value="";
+  songInput.value="";
   currentSong=null;
   revealBtn.textContent="📅 Aufdecken";
   revealBtn.onclick=reveal;
 }
+
+// Fehler zurücksetzen beim tippen
+songInput.addEventListener('input', ()=>{
+  errorMessage.style.display="none";
+  songInput.classList.remove('error');
+});
 </script>
 
 </body>
