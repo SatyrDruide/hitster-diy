@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-<title>Hitster DIY – Landing Page</title>
+<title>Hitster DIY – Spiel</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
@@ -15,23 +15,30 @@
   --accent-dark: #ff5ab0;
 }
 
-/* Grundlayout */
+/* Body & Dark Mode */
 body {
   margin: 0;
   font-family: 'Helvetica Neue', Arial, sans-serif;
   background: var(--bg-light);
   color: var(--text-light);
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
-  min-height: 100vh;
-  padding: 40px 20px;
-  overflow-x: hidden;
+  justify-content: space-between;
+  padding: 20px;
   transition: background 0.4s, color 0.4s;
 }
-
 body.dark { background: var(--bg-dark); color: var(--text-dark); }
+
+/* Header */
+h2 {
+  font-size: 2.5em;
+  color: var(--accent-light);
+  margin-bottom: 20px;
+  text-align: center;
+}
+body.dark h2 { color: var(--accent-dark); }
 
 /* Dark Mode Toggle */
 .dark-toggle {
@@ -41,7 +48,6 @@ body.dark { background: var(--bg-dark); color: var(--text-dark); }
   display: flex;
   align-items: center;
   cursor: pointer;
-  user-select: none;
 }
 
 .toggle-switch {
@@ -53,7 +59,6 @@ body.dark { background: var(--bg-dark); color: var(--text-dark); }
   margin-left: 10px;
   transition: background 0.3s;
 }
-
 .toggle-switch::after {
   content: '';
   position: absolute;
@@ -63,141 +68,118 @@ body.dark { background: var(--bg-dark); color: var(--text-dark); }
   border-radius: 50%;
   top: 2px;
   left: 2px;
-  transition: all 0.3s;
+  transition: transform 0.3s;
 }
-
 body.dark .toggle-switch { background: #666; }
 body.dark .toggle-switch::after { transform: translateX(24px); }
 
-/* Logo */
-.logo {
-  font-size: 4em;
-  color: #ff3ca6;
+/* Song Eingabe + Buttons */
+.controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   margin-bottom: 20px;
-  text-align: center;
-  text-shadow: 0 0 10px rgba(255,60,166,0.7);
-  animation: pulse 2s infinite;
-  transition: color 0.4s;
 }
-body.dark .logo { color: #ff5ab0; text-shadow: 0 0 12px rgba(255,90,176,0.7); }
-
-@keyframes pulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-}
-
-/* Status */
-.status {
+input[type="text"] {
   font-size: 1.2em;
-  color: #555;
-  margin-bottom: 30px;
+  padding: 10px;
+  width: 160px;
+  border-radius: 10px;
+  border: 2px solid var(--accent-light);
   text-align: center;
-  transition: color 0.4s;
+  margin-bottom: 10px;
+  outline: none;
 }
-body.dark .status { color: #ccc; }
+body.dark input { border-color: var(--accent-dark); }
 
-/* CTA Button */
-.cta-btn {
-  font-size: 1.5em;
-  padding: 16px 40px;
+button {
+  font-size: 1.2em;
+  padding: 12px 30px;
+  margin: 5px;
   border: none;
-  border-radius: 20px;
+  border-radius: 12px;
   cursor: pointer;
   color: #fff;
-  background-color: #ff3ca6;
-  box-shadow: 0 10px 25px rgba(255,60,166,0.35);
-  transition: all 0.3s;
-  margin-bottom: 40px;
+  background-color: var(--accent-light);
+  box-shadow: 0 8px 20px rgba(255,60,166,0.35);
+  transition: all 0.25s ease;
 }
+button:hover { transform: scale(1.05); background-color: #ff5ab0; }
+body.dark button { background-color: var(--accent-dark); }
 
-.cta-btn:hover {
-  transform: scale(1.05);
-  box-shadow: 0 12px 30px rgba(255,60,166,0.5);
-}
-
-body.dark .cta-btn { background-color: #ff5ab0; }
-
-/* Mini Vorschau-Karte */
-.preview-card-wrapper {
-  perspective: 1000px;
-  width: 200px;
-  height: 300px;
-  margin-bottom: 40px;
-}
-
-.preview-card {
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(160deg, #ffffff, #ffe6f0);
-  border-radius: 20px;
-  box-shadow: 0 15px 35px rgba(0,0,0,0.25);
+/* --- Zentrale Flex-Box für Karte und Next Button --- */
+.main-container {
+  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  transition: transform 0.8s ease, box-shadow 0.4s ease;
-  cursor: pointer;
-}
-.preview-card:hover {
-  transform: rotateY(10deg) rotateX(5deg) scale(1.05);
-  box-shadow: 0 20px 40px rgba(255,60,166,0.4);
+  width: 100%;
 }
 
-.preview-title {
-  font-size: 1.2em;
-  font-weight: bold;
-  color: #ff3ca6;
-  margin-bottom: 10px;
-  text-align: center;
+/* Karte */
+.card-wrapper {
+  perspective: 1200px;
+  width: 280px;
+  height: 420px;
+  margin-bottom: 30px;
 }
-body.dark .preview-title { color: #ff5ab0; }
-
-.preview-year {
-  font-size: 2em;
-  font-weight: 900;
-  color: #222;
-  margin-bottom: 8px;
+.card {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.8s cubic-bezier(.4,.2,.2,1);
 }
-body.dark .preview-year { color: #fff; } /* Jahr jetzt sichtbar im Dark Mode */
+.card.flipped { transform: rotateY(180deg); }
 
-.preview-artist {
-  font-size: 1em;
-  color: #555;
-}
-body.dark .preview-artist { color: #ccc; }
-
-/* Hintergrund Noten Partikel */
-.particle {
+/* Karte Seiten */
+.card-side {
   position: absolute;
-  width: 6px; height: 6px;
-  background-color: #fff;
-  border-radius: 50%;
-  opacity: 0.4;
-  pointer-events: none;
-  animation: floatNotes linear infinite;
+  width: 100%;
+  height: 100%;
+  border-radius: 22px;
+  backface-visibility: hidden;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 25px;
 }
-@keyframes floatNotes {
-  0% { transform: translateY(100vh) rotate(0deg) scale(0.5); opacity: 0; }
-  50% { opacity: 0.6; }
-  100% { transform: translateY(-50px) rotate(360deg) scale(1); opacity: 0; }
+.card-back {
+  background: linear-gradient(160deg, var(--accent-light), #ff85c1);
+  color: white;
+  font-size: 2em;
+  font-weight: bold;
+  letter-spacing: 2px;
 }
+.card-front {
+  background: linear-gradient(160deg, #fff, #ffe6f0);
+  transform: rotateY(180deg);
+  justify-content: space-between;
+}
+.card-title { font-size: 1.2em; font-weight: bold; color: var(--accent-light); }
+.card-year { font-size: 3em; font-weight: 900; color: #222; }
+body.dark .card-year { color: #fff; }
+.card-artist { font-size: 1.2em; color: #555; }
+body.dark .card-artist { color: #ccc; }
 
 /* Footer */
 footer {
-  margin-top: auto;
-  font-size: 0.85em;
+  font-size: 0.9em;
   color: #999;
-  padding: 20px 0;
+  margin-top: 20px;
 }
 body.dark footer { color: #aaa; }
 
 /* Mobile */
 @media (max-width:480px){
-  .logo { font-size: 3em; }
-  .cta-btn { font-size: 1.2em; padding: 14px 32px; }
-  .preview-card-wrapper { width: 160px; height: 240px; }
-  .preview-title { font-size: 1em; }
-  .preview-year { font-size: 1.5em; }
+  .card-wrapper { width: 200px; height: 300px; }
+  .card-title { font-size: 1em; }
+  .card-year { font-size: 2em; }
+  .card-artist { font-size: 1em; }
+  input[type="text"] { width: 140px; }
 }
 </style>
 </head>
@@ -208,56 +190,77 @@ body.dark footer { color: #aaa; }
   <div class="toggle-switch" onclick="toggleDark()"></div>
 </div>
 
-<!-- Logo -->
-<div class="logo">HITSTER</div>
+<h2>🎵 Hitster DIY</h2>
 
-<!-- Status / Info -->
-<div class="status">Tippe auf „Spiel starten“, um loszulegen!</div>
-
-<!-- Mini Vorschau-Karte -->
-<div class="preview-card-wrapper">
-  <div class="preview-card">
-    <div class="preview-title">Song Titel</div>
-    <div class="preview-year">2025</div>
-    <div class="preview-artist">Interpret</div>
-  </div>
+<div class="controls">
+  <input type="text" id="songCode" maxlength="5" placeholder="12345">
+  <button onclick="playSong()">▶ Song öffnen</button>
+  <button onclick="reveal()">📅 Aufdecken</button>
 </div>
 
-<!-- CTA Button -->
-<button class="cta-btn" onclick="startGame()">🎮 Spiel starten</button>
+<div class="main-container">
+  <!-- Karte -->
+  <div class="card-wrapper" id="cardWrapper">
+    <div class="card" id="card">
+      <div class="card-side card-back">HITSTER DIY</div>
+      <div class="card-side card-front">
+        <div class="card-title" id="cardTitle"></div>
+        <div class="card-year" id="cardYear"></div>
+        <div class="card-artist" id="cardArtist"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Nächste Runde Button -->
+  <button onclick="nextRound()">⏭ Nächste Runde</button>
+</div>
 
 <footer>
-  &copy; 2026 Simon Fritsch · Hitster DIY
+  &copy; 2026 Simon Fritsch | HITSTER DIY
 </footer>
 
+<script src="songs.js"></script>
 <script>
-// Dark Mode automatisch
+let currentSong;
+
+// Dark Mode
 const darkIcon = document.getElementById('darkIcon');
 if(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches){
-  document.body.classList.add('dark'); darkIcon.textContent = "🌙";
+  document.body.classList.add('dark'); darkIcon.textContent="🌙";
 }
-
 function toggleDark(){
   document.body.classList.toggle('dark');
-  darkIcon.textContent = document.body.classList.contains('dark') ? "🌙" : "🌞";
+  darkIcon.textContent = document.body.classList.contains('dark')?"🌙":"🌞";
 }
 
-// Hintergrund Partikel
-const colors=['#fff','#ffe6f0','#ff3ca6','#ff85c1'];
-for(let i=0;i<40;i++){
-  const p=document.createElement('div'); p.className='particle';
-  const size=Math.random()*6+4;
-  p.style.width=size+'px';
-  p.style.height=size+'px';
-  p.style.left=Math.random()*100+'vw';
-  p.style.animationDuration=(5+Math.random()*10)+'s';
-  p.style.backgroundColor = colors[Math.floor(Math.random()*colors.length)];
-  document.body.appendChild(p);
+// Song öffnen
+function playSong() {
+  const code = document.getElementById('songCode').value;
+  currentSong = SONGS[code];
+  if(!currentSong){ alert('Falscher Code!'); return; }
+  window.open(currentSong.link,"_blank");
 }
 
-// CTA Start Funktion
-function startGame(){
-  window.location.href="play.html";
+// Aufdecken Animation
+function reveal() {
+  if(!currentSong){ alert('Zuerst Song öffnen!'); return; }
+
+  document.getElementById("cardTitle").textContent = currentSong.title;
+  document.getElementById("cardYear").textContent = currentSong.year;
+  document.getElementById("cardArtist").textContent = currentSong.artist;
+
+  const card = document.getElementById("card");
+  const wrapper = document.getElementById("cardWrapper");
+  wrapper.style.display="block";
+  card.classList.remove("flipped");
+  setTimeout(()=>{ card.classList.add("flipped"); }, 150);
+}
+
+// Nächste Runde
+function nextRound(){
+  document.getElementById("cardWrapper").style.display="none";
+  document.getElementById("songCode").value="";
+  currentSong = null;
 }
 </script>
 
