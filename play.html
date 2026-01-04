@@ -15,178 +15,112 @@
   --accent-dark: #ff5ab0;
 }
 
+/* Body und Dark Mode */
 body {
-  margin: 0;
-  font-family: 'Helvetica Neue', Arial, sans-serif;
+  margin:0;
+  font-family:'Helvetica Neue', Arial, sans-serif;
   background: var(--bg-light);
   color: var(--text-light);
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  padding: 20px;
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
   transition: background 0.4s, color 0.4s;
 }
 body.dark { background: var(--bg-dark); color: var(--text-dark); }
 
 /* Dark Mode Toggle */
 .dark-toggle {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  display: flex;
-  align-items: center;
-  cursor: pointer;
+  position: fixed; top:20px; right:20px;
+  display:flex; align-items:center; cursor:pointer;
 }
 .toggle-switch {
   position: relative;
-  width: 50px;
-  height: 26px;
-  background: #ccc;
-  border-radius: 13px;
-  margin-left: 10px;
+  width:50px; height:26px;
+  background:#ccc;
+  border-radius:13px;
+  margin-left:10px;
   transition: background 0.3s;
 }
 .toggle-switch::after {
-  content: '';
-  position: absolute;
-  width: 22px;
-  height: 22px;
-  background: white;
-  border-radius: 50%;
-  top: 2px;
-  left: 2px;
+  content:'';
+  position:absolute;
+  width:22px; height:22px;
+  background:white;
+  border-radius:50%;
+  top:2px; left:2px;
   transition: transform 0.3s;
 }
-body.dark .toggle-switch { background: #666; }
+body.dark .toggle-switch { background:#666; }
 body.dark .toggle-switch::after { transform: translateX(24px); }
 
-/* Header / Logo */
+/* Header */
 h2 {
-  font-size: 3em;
-  font-weight: bold;
+  font-size:3em;
+  font-weight:bold;
   color: var(--accent-light);
-  text-align: center;
-  margin-bottom: 30px;
-  text-shadow: 0 0 10px rgba(255,60,166,0.6);
-  animation: pulse 2s infinite;
-  transition: color 0.4s;
+  text-align:center;
+  margin:40px 0 20px 0;
+  text-shadow:0 0 10px rgba(255,60,166,0.6);
+  animation:pulse 2s infinite;
 }
-body.dark h2 { color: var(--accent-dark); text-shadow: 0 0 12px rgba(255,90,176,0.7); }
-@keyframes pulse { 0%,100%{transform:scale(1);} 50%{transform:scale(1.05);} }
+body.dark h2 { color: var(--accent-dark); text-shadow:0 0 12px rgba(255,90,176,0.7); }
+@keyframes pulse {0%,100%{transform:scale(1);}50%{transform:scale(1.05);}}
 
 /* Controls */
 .controls {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-bottom: 30px;
+  display:flex; flex-direction:column; align-items:center; margin-bottom:30px;
 }
 input[type="text"] {
-  font-size: 1.2em;
-  padding: 10px;
-  width: 160px;
-  border-radius: 10px;
-  border: 2px solid var(--accent-light);
-  text-align: center;
-  margin-bottom: 10px;
-  outline: none;
+  font-size:1.2em; padding:10px; width:160px;
+  border-radius:10px; border:2px solid var(--accent-light);
+  text-align:center; margin-bottom:10px; outline:none;
 }
 body.dark input { border-color: var(--accent-dark); }
-
 button {
-  font-size: 1.2em;
-  padding: 12px 30px;
-  margin: 5px;
-  border: none;
-  border-radius: 12px;
-  cursor: pointer;
-  color: #fff;
-  background-color: var(--accent-light);
-  box-shadow: 0 8px 20px rgba(255,60,166,0.35);
+  font-size:1.2em; padding:12px 30px; margin:5px;
+  border:none; border-radius:12px; cursor:pointer;
+  color:#fff; background-color: var(--accent-light);
+  box-shadow:0 8px 20px rgba(255,60,166,0.35);
   transition: all 0.25s ease;
 }
-button:hover { transform: scale(1.05); background-color: #ff5ab0; }
+button:hover { transform:scale(1.05); background-color:#ff5ab0; }
 body.dark button { background-color: var(--accent-dark); }
 
-/* Main container */
-.main-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  flex: 1;
-  width: 100%;
-  min-height: 50vh;
+/* Karte Container – vertikal mittig */
+.card-container {
+  flex:1;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  width:100%;
 }
 
 /* Karte */
-.card-wrapper {
-  perspective: 1200px;
-  width: 280px;
-  height: 420px;
-  margin-bottom: 20px; 
-  display: none;
-}
-.card {
-  width: 100%;
-  height: 100%;
-  position: relative;
-  transform-style: preserve-3d;
-  transition: transform 0.8s cubic-bezier(.4,.2,.2,1);
-}
+.card-wrapper { perspective:1200px; width:280px; height:420px; display:none; }
+.card { width:100%; height:100%; position:relative; transform-style:preserve-3d; transition: transform 0.8s cubic-bezier(.4,.2,.2,1); }
 .card.flipped { transform: rotateY(180deg); }
-
-.card-side {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  border-radius: 22px;
-  backface-visibility: hidden;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.25);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 25px;
-  transition: background 0.4s, color 0.4s;
-}
-.card-back {
-  background: linear-gradient(160deg, var(--accent-light), #ff85c1);
-  color: white;
-  font-size: 2em;
-  font-weight: bold;
-  letter-spacing: 2px;
-}
-.card-front {
-  background: linear-gradient(160deg, #fff, #ffe6f0);
-  transform: rotateY(180deg);
-  justify-content: space-between;
-}
-body.dark .card-front { background: linear-gradient(160deg, #2a2a33, #1a1a26); }
-.card-title { font-size: 1.2em; font-weight: bold; color: var(--accent-light); margin-bottom:10px;}
-body.dark .card-title { color: var(--accent-dark); }
-.card-year { font-size: 3em; font-weight: 900; color: #222; margin-bottom:8px;}
-body.dark .card-year { color: #fff; }
-.card-artist { font-size: 1.2em; color: #555;}
-body.dark .card-artist { color: #ccc; }
+.card-side { position:absolute; width:100%; height:100%; border-radius:22px; backface-visibility:hidden; box-shadow:0 20px 40px rgba(0,0,0,0.25); display:flex; flex-direction:column; justify-content:center; align-items:center; padding:25px; transition:background 0.4s,color 0.4s; }
+.card-back { background: linear-gradient(160deg, var(--accent-light), #ff85c1); color:white; font-size:2em; font-weight:bold; letter-spacing:2px; }
+.card-front { background: linear-gradient(160deg,#fff,#ffe6f0); transform:rotateY(180deg); justify-content:space-between; }
+body.dark .card-front { background: linear-gradient(160deg,#2a2a33,#1a1a26); }
+.card-title { font-size:1.2em; font-weight:bold; color:var(--accent-light); margin-bottom:10px; }
+body.dark .card-title { color:var(--accent-dark); }
+.card-year { font-size:3em; font-weight:900; color:#222; margin-bottom:8px; }
+body.dark .card-year { color:#fff; }
+.card-artist { font-size:1.2em; color:#555; }
+body.dark .card-artist { color:#ccc; }
 
 /* Footer */
-footer {
-  font-size: 0.9em;
-  color: #999;
-  margin-top: 20px;
-}
-body.dark footer { color: #aaa; }
+footer { font-size:0.9em; color:#999; margin-top:20px; }
+body.dark footer { color:#aaa; }
 
 /* Mobile */
-@media (max-width:480px){
-  .card-wrapper { width: 200px; height: 300px; }
-  .card-title { font-size: 1em; }
-  .card-year { font-size: 2em; }
-  .card-artist { font-size: 1em; }
-  input[type="text"] { width: 140px; }
+@media(max-width:480px){
+  .card-wrapper{ width:200px; height:300px; }
+  .card-title{ font-size:1em; }
+  .card-year{ font-size:2em; }
+  .card-artist{ font-size:1em; }
+  input[type="text"]{ width:140px; }
 }
 </style>
 </head>
@@ -205,7 +139,7 @@ body.dark footer { color: #aaa; }
   <button id="revealButton" onclick="reveal()">📅 Aufdecken</button>
 </div>
 
-<div class="main-container">
+<div class="card-container">
   <div class="card-wrapper" id="cardWrapper">
     <div class="card" id="card">
       <div class="card-side card-back">HITSTER DIY</div>
@@ -218,9 +152,7 @@ body.dark footer { color: #aaa; }
   </div>
 </div>
 
-<footer>
-  &copy; 2026 Simon Fritsch | HITSTER DIY
-</footer>
+<footer>&copy; 2026 Simon Fritsch | HITSTER DIY</footer>
 
 <script src="songs.js"></script>
 <script>
@@ -237,7 +169,7 @@ function toggleDark(){
 }
 
 // Song öffnen
-function playSong() {
+function playSong(){
   const code = document.getElementById('songCode').value;
   currentSong = SONGS[code];
   if(!currentSong){ alert('Falscher Code!'); return; }
@@ -251,27 +183,23 @@ const card = document.getElementById("card");
 
 function reveal(){
   if(!currentSong){ alert('Zuerst Song öffnen!'); return; }
-
-  document.getElementById("cardTitle").textContent = currentSong.title;
-  document.getElementById("cardYear").textContent = currentSong.year;
-  document.getElementById("cardArtist").textContent = currentSong.artist;
-
-  cardWrapper.style.display = "block";
+  document.getElementById("cardTitle").textContent=currentSong.title;
+  document.getElementById("cardYear").textContent=currentSong.year;
+  document.getElementById("cardArtist").textContent=currentSong.artist;
+  cardWrapper.style.display="block";
   card.classList.remove("flipped");
-  setTimeout(()=>{ card.classList.add("flipped"); }, 150);
-
-  // Button wird zu Nächste Runde
-  revealBtn.textContent = "⏭ Nächste Runde";
-  revealBtn.onclick = nextRound;
+  setTimeout(()=>{ card.classList.add("flipped"); },150);
+  revealBtn.textContent="⏭ Nächste Runde";
+  revealBtn.onclick=nextRound;
 }
 
 function nextRound(){
-  cardWrapper.style.display = "none";
+  cardWrapper.style.display="none";
   card.classList.remove("flipped");
-  document.getElementById('songCode').value = "";
-  currentSong = null;
-  revealBtn.textContent = "📅 Aufdecken";
-  revealBtn.onclick = reveal;
+  document.getElementById('songCode').value="";
+  currentSong=null;
+  revealBtn.textContent="📅 Aufdecken";
+  revealBtn.onclick=reveal;
 }
 </script>
 
