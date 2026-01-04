@@ -15,6 +15,7 @@
   --accent-dark: #ff5ab0;
 }
 
+/* Grundlayout */
 body {
   margin: 0;
   font-family: 'Helvetica Neue', Arial, sans-serif;
@@ -26,6 +27,7 @@ body {
   align-items: center;
   min-height: 100vh;
   transition: background 0.4s, color 0.4s;
+  overflow: hidden;
   padding: 20px;
 }
 
@@ -34,6 +36,7 @@ body.dark {
   color: var(--text-dark);
 }
 
+/* Dark Mode Toggle */
 .dark-toggle {
   position: absolute;
   top: 20px;
@@ -43,6 +46,7 @@ body.dark {
   user-select: none;
 }
 
+/* Header */
 h1 {
   font-size: 3em;
   margin-bottom: 10px;
@@ -60,6 +64,7 @@ h2 {
   max-width: 450px;
 }
 
+/* CTA Button */
 .cta-button {
   font-size: 1.4em;
   padding: 16px 40px;
@@ -83,7 +88,7 @@ body.dark .cta-button { background-color: var(--accent-dark); }
   50% { transform: scale(1.07); }
 }
 
-/* ---------- Vorschau Karte ---------- */
+/* Vorschau-Karte */
 .preview-wrapper {
   perspective: 1200px;
   width: 280px;
@@ -92,6 +97,7 @@ body.dark .cta-button { background-color: var(--accent-dark); }
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative;
 }
 
 .preview-card {
@@ -147,6 +153,7 @@ body.dark .card-year { color: #f2f2f2; }
 .card-artist { font-size: 1.2em; color: #555; }
 body.dark .card-artist { color: #ccc; }
 
+/* Footer */
 footer {
   margin-top: auto;
   font-size: 0.85em;
@@ -156,9 +163,26 @@ footer {
 
 body.dark footer { color: #aaa; }
 
+/* Mobile */
 @media (max-width:480px) {
   .preview-wrapper { width: 220px; height: 330px; }
   .card-year { font-size: 3em; }
+}
+
+/* Hintergrund Partikel */
+.particle {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.4;
+  background-color: white;
+  pointer-events: none;
+  animation: floatParticles linear infinite;
+}
+
+@keyframes floatParticles {
+  0% { transform: translateY(100vh) scale(0.5); opacity: 0; }
+  50% { opacity: 0.4; }
+  100% { transform: translateY(-50px) scale(1); opacity: 0; }
 }
 </style>
 </head>
@@ -169,7 +193,7 @@ body.dark footer { color: #aaa; }
 <h1>🎵 Hitster DIY</h1>
 <h2>Errate Songs. Decke das Jahr auf. Erlebe Musik neu!</h2>
 
-<!-- Interaktive Vorschau Karte -->
+<!-- Vorschau-Karte -->
 <div class="preview-wrapper">
   <div class="preview-card" id="previewCard">
     <div class="card-side card-back">HITSTER<br>DIY</div>
@@ -189,14 +213,33 @@ body.dark footer { color: #aaa; }
 </footer>
 
 <script>
-const previewCard = document.getElementById("previewCard");
+// Dark Mode automatisch nach System
+if(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+  document.body.classList.add('dark');
+}
 
-function toggleDark() { document.body.classList.toggle("dark"); }
+function toggleDark() { document.body.classList.toggle('dark'); }
 
 // Flip Animation Vorschau
-setInterval(() => { previewCard.classList.toggle("flipped"); }, 3000);
+const previewCard = document.getElementById('previewCard');
+setInterval(() => { previewCard.classList.toggle('flipped'); }, 3000);
 
+// CTA
 function startGame() { window.location.href = "play.html"; }
+
+// Hintergrund Partikel erzeugen
+const colors = ['#fff', '#ffe6f0', '#ff3ca6', '#ff85c1'];
+for(let i=0;i<40;i++){
+  const p = document.createElement('div');
+  p.className = 'particle';
+  const size = Math.random()*6+4;
+  p.style.width = size+'px';
+  p.style.height = size+'px';
+  p.style.left = Math.random()*100+'vw';
+  p.style.animationDuration = (5+Math.random()*10)+'s';
+  p.style.backgroundColor = colors[Math.floor(Math.random()*colors.length)];
+  document.body.appendChild(p);
+}
 </script>
 
 </body>
